@@ -1,0 +1,1075 @@
+{
+	"name": "Combine Azure SQL-SQL Dedicated Pool - ADLS Info",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "SparkSC",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "bb954c94-d0e7-47c1-908c-8ba82071c346"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"synapse_widget": {
+				"version": "0.1",
+				"state": {
+					"501b8422-140c-4322-9a70-bcaa23ba1e35": {
+						"type": "Synapse.DataFrame",
+						"sync_state": {
+							"table": {
+								"rows": [
+									{
+										"0": "29577",
+										"1": "Lester",
+										"2": "Bowman",
+										"3": "Metal Processing Company",
+										"4": "471",
+										"5": "Main Office",
+										"6": "770 Notre Datme Quest Bureau 800",
+										"8": "Montreal",
+										"9": "Quebec",
+										"10": "H1Y 2H7",
+										"11": "Canada"
+									},
+									{
+										"0": "29641",
+										"1": "Raul",
+										"2": "Casts",
+										"3": "Westside Plaza",
+										"4": "1088",
+										"5": "Main Office",
+										"6": "99040 California Avenue",
+										"8": "Sand City",
+										"9": "California",
+										"10": "93955",
+										"11": "United States"
+									},
+									{
+										"0": "29816",
+										"1": "Keith",
+										"2": "Harris",
+										"3": "Progressive Sports",
+										"4": "833",
+										"5": "Main Office",
+										"6": "3207 S Grady Way",
+										"8": "Renton",
+										"9": "Washington",
+										"10": "98055",
+										"11": "United States"
+									},
+									{
+										"0": "29950",
+										"1": "Yale",
+										"2": "Li",
+										"3": "Rapid Bikes",
+										"4": "463",
+										"5": "Main Office",
+										"6": "992 St Clair Ave East",
+										"8": "Toronto",
+										"9": "Ontario",
+										"10": "M4B 1V7",
+										"11": "Canada"
+									},
+									{
+										"0": "30021",
+										"1": "Ben",
+										"2": "Miller",
+										"3": "Low Price Cycles",
+										"4": "496",
+										"5": "Main Office",
+										"6": "Suite 500 995 W. 11th Avenue",
+										"8": "Mississauga",
+										"9": "Ontario",
+										"10": "L5A 1H6",
+										"11": "Canada"
+									},
+									{
+										"0": "29510",
+										"1": "Cecil",
+										"2": "Allison",
+										"3": "Designated Distributors",
+										"4": "540",
+										"5": "Main Office",
+										"6": "254 Colonnade Road",
+										"8": "Nepean",
+										"9": "Ontario",
+										"10": "K2J 2W5",
+										"11": "Canada"
+									},
+									{
+										"0": "29753",
+										"1": "Kathie",
+										"2": "Flood",
+										"3": "Coho Sports",
+										"4": "897",
+										"5": "Main Office",
+										"6": "705 SE Mall Parkway",
+										"8": "Everett",
+										"9": "Washington",
+										"10": "98201",
+										"11": "United States"
+									},
+									{
+										"0": "29850",
+										"1": "Bob",
+										"2": "Hodges",
+										"3": "All Seasons Sports Supply",
+										"4": "623",
+										"5": "Main Office",
+										"6": "Ohms Road",
+										"8": "Houston",
+										"9": "Texas",
+										"10": "77003",
+										"11": "United States"
+									},
+									{
+										"0": "29873",
+										"1": "Mary",
+										"2": "Alexander",
+										"3": "Certified Bicycle Supply",
+										"4": "858",
+										"5": "Main Office",
+										"6": "2345 West Spencer Road",
+										"8": "Lynnwood",
+										"9": "Washington",
+										"10": "98036",
+										"11": "United States"
+									},
+									{
+										"0": "29883",
+										"1": "Barry",
+										"2": "Johnson",
+										"3": "Sample Bike Store",
+										"4": "1025",
+										"5": "Main Office",
+										"6": "2530 South Colorado Blvd.",
+										"8": "Denver",
+										"9": "Colorado",
+										"10": "80203",
+										"11": "United States"
+									}
+								],
+								"schema": [
+									{
+										"key": "0",
+										"name": "CustomerID",
+										"type": "int"
+									},
+									{
+										"key": "1",
+										"name": "FirstName",
+										"type": "string"
+									},
+									{
+										"key": "2",
+										"name": "LastName",
+										"type": "string"
+									},
+									{
+										"key": "3",
+										"name": "CompanyName",
+										"type": "string"
+									},
+									{
+										"key": "4",
+										"name": "AddressID",
+										"type": "string"
+									},
+									{
+										"key": "5",
+										"name": "AddressType",
+										"type": "string"
+									},
+									{
+										"key": "6",
+										"name": "AddressLine1",
+										"type": "string"
+									},
+									{
+										"key": "7",
+										"name": "AddressLine2",
+										"type": "string"
+									},
+									{
+										"key": "8",
+										"name": "City",
+										"type": "string"
+									},
+									{
+										"key": "9",
+										"name": "StateProvince",
+										"type": "string"
+									},
+									{
+										"key": "10",
+										"name": "PostalCode",
+										"type": "string"
+									},
+									{
+										"key": "11",
+										"name": "CountryRegion",
+										"type": "string"
+									}
+								],
+								"truncated": false
+							},
+							"isSummary": false,
+							"language": "scala"
+						},
+						"persist_state": {
+							"view": {
+								"type": "details",
+								"chartOptions": {
+									"chartType": "bar",
+									"aggregationType": "sum",
+									"categoryFieldKeys": [
+										"1"
+									],
+									"seriesFieldKeys": [
+										"0"
+									],
+									"isStacked": false
+								}
+							}
+						}
+					}
+				}
+			},
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "scala"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/3a99ffce-3379-4883-8224-ca35bbb5f4c8/resourceGroups/supplychainsynapse/providers/Microsoft.Synapse/workspaces/supply-chain-synapse/bigDataPools/SparkSC",
+				"name": "SparkSC",
+				"type": "Spark",
+				"endpoint": "https://supply-chain-synapse.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/SparkSC",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.2",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Part 1 - Customer Info\r\n",
+					"\r\n",
+					"## Declare the values for your SQL database"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"outputs_hidden": true
+					}
+				},
+				"source": [
+					"val jdbcUsername = TokenLibrary.getSecret(\"kv-supplychainhack\", \"jobenderusername\")\r\n",
+					"val jdbcPassword = TokenLibrary.getSecret(\"kv-supplychainhack\", \"jobenderpassword\")\r\n",
+					"val jdbcHostname = \"jbender.database.windows.net\" //typically, this is in the form or servername.database.windows.net\r\n",
+					"val jdbcPort = 1433\r\n",
+					"val jdbcDatabase =\"AdventureWorksLT\""
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Use the snippet below to build a JDBC URL that you can pass to the Spark dataframe APIs."
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"import java.util.Properties\r\n",
+					"\r\n",
+					"val jdbc_url = s\"jdbc:sqlserver://${jdbcHostname}:${jdbcPort};database=${jdbcDatabase};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=60;\"\r\n",
+					"val connectionProperties = new Properties()\r\n",
+					"connectionProperties.put(\"user\", s\"${jdbcUsername}\")\r\n",
+					"connectionProperties.put(\"password\", s\"${jdbcPassword}\")"
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Create a dataframe with the data from a table in your database and create the TempView"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"val sqlTableDF = spark.read.jdbc(jdbc_url, \"SalesLT.Customer\", connectionProperties)\r\n",
+					"sqlTableDF.createOrReplaceTempView( \"tmpCustomer\" )"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Get the data schema from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"sqlTableDF.printSchema"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Retrieve the top 10 rows from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"sqlTableDF.show(10)"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Run SparkSQL from TempView to test results"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"SELECT * from tmpCustomer"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Part 2 - Customer Address Info\r\n",
+					"## Declare ADLS Gen2 value to pass the Customer Address Info to the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"\r\n",
+					"from pyspark.sql import SparkSession \r\n",
+					"from pyspark.sql.types import * \r\n",
+					"\r\n",
+					"# Primary storage info \r\n",
+					"account_name = 'supplychainbronze' # fill in your primary account name \r\n",
+					"container_name = 'adventureworkslt' # fill in your container name \r\n",
+					"relative_path = 'notebookdemo/customeraddress/' # fill in your relative folder path \r\n",
+					"\r\n",
+					"adls_path = 'abfss://%s@%s.dfs.core.windows.net/%s' % (container_name, account_name, relative_path) \r\n",
+					"print('Primary storage account path: ' + adls_path) \r\n",
+					"\r\n",
+					"# Read a csv file \r\n",
+					"csv_path = adls_path + 'customeraddress.csv' \r\n",
+					"csvDF = spark.read.csv(csv_path, header = 'true') "
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Retrieve the top 10 rows from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"\r\n",
+					"csvDF.show(10)"
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Get the data schema from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"\r\n",
+					"csvDF.printSchema"
+				],
+				"execution_count": 9
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Create the TempView from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"\r\n",
+					"csvDF.createOrReplaceTempView( \"tmpCustomerAddress\" )"
+				],
+				"execution_count": 10
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Run SparkSQL from TempView to test results"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"SELECT * FROM tmpCustomerAddress"
+				],
+				"execution_count": 11
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Part 3 - Addresss Info\r\n",
+					"## Declare the values for your SQL Dedicated Pool"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "scala"
+					}
+				},
+				"source": [
+					"%%spark \r\n",
+					"import org.apache.spark.sql.SqlAnalyticsConnector._ \r\n",
+					"import com.microsoft.spark.sqlanalytics.utils.Constants \r\n",
+					"\r\n",
+					"val sql_pool_name = \"AdventureWorks\" //fill in your sql pool name \r\n",
+					"val schema_name = \"SalesLT\" //fill in your sql schema name \r\n",
+					"val table_name = \"Address\" //fill in your sql table name "
+				],
+				"execution_count": 12
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Create a dataframe with the data from a table in your Dedicated Pool and create the TempView"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"// Read the sql table as a Spark dataframe \r\n",
+					"val DedicatedPoolDF = spark.read. \r\n",
+					"    sqlanalytics(s\"$sql_pool_name.$schema_name.$table_name\") \r\n",
+					"DedicatedPoolDF.createOrReplaceTempView( \"tmpAddress\" )"
+				],
+				"execution_count": 13
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Get the data schema from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"DedicatedPoolDF.printSchema"
+				],
+				"execution_count": 14
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Retrieve the top 10 rows from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"DedicatedPoolDF.show(10)"
+				],
+				"execution_count": 15
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Run SparkSQL from TempView to test results"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"SELECT * from tmpAddress"
+				],
+				"execution_count": 17
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Part 4\r\n",
+					"## Combine the TempViews data in a Spark SQL statement"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"select \r\n",
+					"    C.CustomerID,\r\n",
+					"    C.FirstName, \r\n",
+					"    C.LastName, \r\n",
+					"    C.CompanyName,\r\n",
+					"    CA.AddressID,\r\n",
+					"    CA.AddressType,\r\n",
+					"    A.AddressLine1,\r\n",
+					"    A.AddressLine2,\r\n",
+					"    A.City,\r\n",
+					"    A.StateProvince,\r\n",
+					"    A.PostalCode,\r\n",
+					"    A.CountryRegion\r\n",
+					"\r\n",
+					"from tmpCustomer C\r\n",
+					"INNER JOIN tmpCustomerAddress CA on C.CustomerID = CA.CustomerID\r\n",
+					"INNER JOIN tmpAddress A on CA.AddressID = A.AddressID"
+				],
+				"execution_count": 18
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Part 5\r\n",
+					"## Write the data back to a silver/integrated Delta Lake in ADLS Gen2 "
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"Put SQL statement above into a Data Frame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"\r\n",
+					"resultsDF = spark.sql(\"select C.CustomerID, C.FirstName, C.LastName, C.CompanyName, CA.AddressID, CA.AddressType, A.AddressLine1, A.AddressLine2, A.City, A.StateProvince, A.PostalCode, A.CountryRegion  from tmpCustomer C  INNER JOIN tmpCustomerAddress CA on C.CustomerID = CA.CustomerID  INNER JOIN tmpAddress A on CA.AddressID = A.AddressID\")"
+				],
+				"execution_count": 19
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"View the Schema of the Dataframe"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"\r\n",
+					"print(resultsDF)"
+				],
+				"execution_count": 20
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"Retrieve the top 10 rows from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"\r\n",
+					"display(resultsDF.limit(10))\r\n",
+					""
+				],
+				"execution_count": 21
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"Write the dataframe to the silver/integrated delta lake"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"\r\n",
+					"from pyspark.sql import SparkSession \r\n",
+					"from pyspark.sql.types import * \r\n",
+					"\r\n",
+					"# Primary storage info \r\n",
+					"account_name_write = 'supplychainsilver' # fill in your primary account name \r\n",
+					"container_name_write = 'sales' # fill in your container name \r\n",
+					"relative_path_write = 'notebookdemo/customers' # fill in your relative folder path \r\n",
+					"\r\n",
+					"delta_table_path = 'abfss://%s@%s.dfs.core.windows.net/%s' % (container_name_write, account_name_write, relative_path_write) \r\n",
+					"print('Delta Lake path: ' + delta_table_path) \r\n",
+					"\r\n",
+					"data = resultsDF \r\n",
+					"\r\n",
+					"# Write spark dataframe to a Delta Lake \r\n",
+					"data.write.format(\"delta\").mode(\"overwrite\").save(delta_table_path)"
+				],
+				"execution_count": 22
+			}
+		]
+	}
+}

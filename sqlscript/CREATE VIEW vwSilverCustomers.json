@@ -1,0 +1,17 @@
+{
+	"name": "CREATE VIEW vwSilverCustomers",
+	"properties": {
+		"content": {
+			"query": "--CREATE VIEW vwSilverCustomers AS\n\nSELECT\n *\nFROM\n\n    OPENROWSET(\n        BULK 'sales/customers',\n        DATA_SOURCE = 'SqlOnDemandMI',\n        FORMAT = 'delta'    \n\n    ) AS Customers;\n\n-- select * from vwSilverCustomers order by CustomerID ASC\n\n-- select count(CustomerID) from vwSilverCustomers\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SilverLayer",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

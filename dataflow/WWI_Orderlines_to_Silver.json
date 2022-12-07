@@ -1,0 +1,105 @@
+{
+	"name": "WWI_Orderlines_to_Silver",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeOrderlines"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					},
+					"name": "OutputtoSilver",
+					"rejectedDataLinkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectOrderlines"
+				},
+				{
+					"name": "DerivedColumnOrderlines"
+				},
+				{
+					"name": "alterRow"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     SourceDatabase as string",
+				"}",
+				"source(output(",
+				"          OrderLineID as short,",
+				"          OrderID as short,",
+				"          StockItemID as short,",
+				"          Description as string,",
+				"          PackageTypeID as short,",
+				"          Quantity as short,",
+				"          UnitPrice as double,",
+				"          TaxRate as double,",
+				"          PickedQuantity as short,",
+				"          PickingCompletedWhen as string,",
+				"          LastEditedBy as short,",
+				"          LastEditedWhen as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['Sales/Orderlines/new/','Sales/Orderlines/imported/'],",
+				"     wildcardPaths:['Sales/Orderlines/new/*.csv']) ~> BronzeOrderlines",
+				"BronzeOrderlines select(mapColumn(",
+				"          OrderID,",
+				"          OrderLineID,",
+				"          Quantity,",
+				"          ProductID = StockItemID,",
+				"          UnitPrice,",
+				"          ModifiedDate = LastEditedWhen",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectOrderlines",
+				"SelectOrderlines derive(OrderID = concat('WWI-', toString(OrderID)),",
+				"          OrderLineID = concat('WWI-', toString(OrderLineID)),",
+				"          ProductID = concat('WWI-', toString(ProductID)),",
+				"          UnitPriceDiscount = 0,",
+				"          LineTotal = Quantity * UnitPrice,",
+				"          ModifiedDate = toTimestamp(ModifiedDate),",
+				"          Source = 'WideWorldImporters') ~> DerivedColumnOrderlines",
+				"DerivedColumnOrderlines alterRow(upsertIf(isNull(OrderLineID)==false())) ~> alterRow",
+				"alterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     compressionType: 'snappy',",
+				"     compressionLevel: 'Fastest',",
+				"     fileSystem: 'sales',",
+				"     folderPath: 'salesorderdetail/',",
+				"     mergeSchema: false,",
+				"     autoCompact: true,",
+				"     optimizedWrite: true,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['OrderID'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> OutputtoSilver"
+			]
+		}
+	}
+}

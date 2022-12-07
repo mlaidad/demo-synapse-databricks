@@ -1,0 +1,17 @@
+{
+	"name": "CREATE VIEW vwSilverProducts",
+	"properties": {
+		"content": {
+			"query": "\n/*\nCREATE VIEW vwSilverProducts AS\n\nSELECT\n *\nFROM\n\n    OPENROWSET(\n        BULK 'sales/products',\n        DATA_SOURCE = 'SqlOnDemandMI',\n        FORMAT = 'delta'    \n\n    ) AS Products;\n\n*/\n\nselect * from vwSilverProducts order by ProductID ASC\n\n-- select count(ProductID) from vwSilverProducts\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SilverLayer",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

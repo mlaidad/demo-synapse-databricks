@@ -1,0 +1,36 @@
+{
+	"name": "DATAFACTORY",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DATAFACTORY_jobender",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "TableName",
+				"type": "varchar"
+			},
+			{
+				"name": "WatermarkValue",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "TableSchema",
+				"type": "varchar"
+			},
+			{
+				"name": "SourceDatabase",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "watermarktable"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

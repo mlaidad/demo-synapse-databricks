@@ -1,0 +1,45 @@
+{
+	"name": "Databricks_BronzeLayer",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "databricksbronzestorage",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TableName": {
+				"type": "string"
+			},
+			"TableSchema": {
+				"type": "string"
+			},
+			"SourceDatabase": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat(dataset().TableName, '-',string(formatDateTime(pipeline().TriggerTime, 'yyyyMMdd')),'-',string(formatDateTime(pipeline().TriggerTime, 'HHmm')),'.csv')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().TableName",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@toLower(dataset().SourceDatabase)",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

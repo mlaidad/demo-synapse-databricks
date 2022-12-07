@@ -1,0 +1,29 @@
+{
+	"name": "relationship-arnneekhjg",
+	"properties": {
+		"Name": "relationship-arnneekhjg",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Channel",
+		"ToTableName": "Order",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "ChannelId",
+				"ToColumnName": "DistributionChannelId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Channel.cdm.json/Channel\",\"toEntity\":\"Order.cdm.json/Order\",\"joinPairs\":[{\"fromAttribute\":\"ChannelId\",\"toAttribute\":\"DistributionChannelId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "2a5c505a-d453-4312-b281-6a66435c9ba2"
+	},
+	"type": "RELATIONSHIP"
+}

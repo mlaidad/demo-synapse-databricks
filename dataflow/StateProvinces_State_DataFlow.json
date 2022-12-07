@@ -1,0 +1,31 @@
+{
+	"name": "StateProvinces_State_DataFlow",
+	"properties": {
+		"folder": {
+			"name": "StateProvinces"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "demo-synapse-databricks-WorkspaceDefaultStorage",
+						"type": "LinkedServiceReference"
+					},
+					"name": "StateProvincescsvSource"
+				}
+			],
+			"sinks": [
+				{
+					"name": "StateSink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectState"
+				}
+			],
+			"script": "source(output(\n\t\tStateProvinceID as short,\n\t\tStateProvinceCode as string,\n\t\tStateProvinceName as string,\n\t\tCountryID as short,\n\t\tSalesTerritory as string\n\t),\n\tuseSchema: false,\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'delimited',\n\tfileSystem: 'wwi',\n\tfolderPath: 'StateProvinces',\n\tfileName: 'StateProvinces.csv',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true) ~> StateProvincescsvSource\nStateProvincescsvSource select(mapColumn(\n\t\tStateId = StateProvinceID,\n\t\tStateUspsCode = StateProvinceCode,\n\t\tStateName = StateProvinceName\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> SelectState\nSelectState sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tstore: 'synapse',\n\tdatabaseType: 'spark',\n\tformat: 'table',\n\tdatabase: 'MFG_Template',\n\ttableName: 'State',\n\tinput(\n\t\tStateId as integer,\n\t\tStateName as string,\n\t\tCensusDivisionId as integer,\n\t\tFipsCode as string,\n\t\tStateUspsCode as string\n\t)) ~> StateSink"
+		}
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"name": "relationship-fcyqwyslto",
+	"properties": {
+		"Name": "relationship-fcyqwyslto",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Channel",
+		"ToTableName": "Transaction",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "ChannelId",
+				"ToColumnName": "PurchasingChannelId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Channel.cdm.json/Channel\",\"toEntity\":\"Transaction.cdm.json/Transaction\",\"joinPairs\":[{\"fromAttribute\":\"ChannelId\",\"toAttribute\":\"PurchasingChannelId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "2f081c44-e9b4-4269-85f0-dc0f41508d2a"
+	},
+	"type": "RELATIONSHIP"
+}

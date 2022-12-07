@@ -1,0 +1,31 @@
+{
+	"name": "Bronze_DelimitedText",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "demosynapsebronze",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SourceDatabase": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": {
+					"value": "@dataset().SourceDatabase",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

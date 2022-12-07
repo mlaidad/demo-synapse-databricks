@@ -1,0 +1,213 @@
+{
+	"name": "ADW_Product_to_Silver_CRUD",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeProduct"
+				},
+				{
+					"dataset": {
+						"referenceName": "SilverDataLake",
+						"type": "DatasetReference"
+					},
+					"name": "SilverProducts"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					},
+					"name": "UpsertSilver",
+					"rejectedDataLinkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					}
+				},
+				{
+					"linkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					},
+					"name": "DeleteSilver",
+					"rejectedDataLinkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectProduct"
+				},
+				{
+					"name": "DerivedColumnProduct"
+				},
+				{
+					"name": "alterRowUpsert"
+				},
+				{
+					"name": "selectSilverProducts"
+				},
+				{
+					"name": "join"
+				},
+				{
+					"name": "split1"
+				},
+				{
+					"name": "alterRowDelete"
+				},
+				{
+					"name": "selectUpsert"
+				},
+				{
+					"name": "selectDelete"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     SourceDatabase as string ('adventureworkslt')",
+				"}",
+				"source(output(",
+				"          ProductID as short,",
+				"          Name as string,",
+				"          ProductNumber as string,",
+				"          Color as string,",
+				"          StandardCost as double,",
+				"          ListPrice as double,",
+				"          Size as string,",
+				"          Weight as double,",
+				"          ProductCategoryID as short,",
+				"          ProductModelID as short,",
+				"          SellStartDate as string,",
+				"          SellEndDate as string,",
+				"          DiscontinuedDate as string,",
+				"          ThumbNailPhoto as string,",
+				"          ThumbnailPhotoFileName as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['SalesLT/Product/new/','SalesLT/Product/imported/'],",
+				"     wildcardPaths:['SalesLT/Product/new/*.csv']) ~> BronzeProduct",
+				"source(output(",
+				"          ProductID as string,",
+				"          ProductName as string,",
+				"          ProductNumber as string,",
+				"          UnitPrice as double,",
+				"          RetailPrice as double,",
+				"          ModifiedDate as timestamp,",
+				"          Source as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     limit: 100,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'select * from vwSilverProducts where Source = \\'AdventureWorksLT\\' ',",
+				"     format: 'query') ~> SilverProducts",
+				"BronzeProduct select(mapColumn(",
+				"          ProductID,",
+				"          ProductName = Name,",
+				"          ProductNumber,",
+				"          UnitPrice = StandardCost,",
+				"          RetailPrice = ListPrice,",
+				"          ModifiedDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectProduct",
+				"SelectProduct derive(ProductID = concat('ADV-', toString(ProductID)),",
+				"          ModifiedDate = toTimestamp(ModifiedDate),",
+				"          Source = 'AdventureWorksLT') ~> DerivedColumnProduct",
+				"split1@alterRowUpsert alterRow(upsertIf(isNull(ProductID)==false())) ~> alterRowUpsert",
+				"SilverProducts select(mapColumn(",
+				"          SilverProductID = ProductID,",
+				"          SilverModifiedDate = ModifiedDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectSilverProducts",
+				"DerivedColumnProduct, selectSilverProducts join(ProductID == SilverProductID,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join",
+				"join split(isNull(ProductID)==false(),",
+				"     disjoint: false) ~> split1@(alterRowUpsert, alterRowDelete)",
+				"split1@alterRowDelete alterRow(deleteIf(isNull(ProductID)==true())) ~> alterRowDelete",
+				"alterRowUpsert select(mapColumn(",
+				"          ProductID,",
+				"          ProductName,",
+				"          ProductNumber,",
+				"          UnitPrice,",
+				"          RetailPrice,",
+				"          ModifiedDate,",
+				"          Source",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectUpsert",
+				"alterRowDelete select(mapColumn(",
+				"          ProductID = SilverProductID,",
+				"          ProductName,",
+				"          ProductNumber,",
+				"          UnitPrice,",
+				"          RetailPrice,",
+				"          ModifiedDate,",
+				"          Source",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectDelete",
+				"selectUpsert sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     compressionType: 'snappy',",
+				"     compressionLevel: 'Fastest',",
+				"     fileSystem: 'sales',",
+				"     folderPath: 'products/',",
+				"     mergeSchema: false,",
+				"     autoCompact: true,",
+				"     optimizedWrite: true,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['ProductID'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> UpsertSilver",
+				"selectDelete sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     compressionType: 'snappy',",
+				"     compressionLevel: 'Fastest',",
+				"     fileSystem: 'sales',",
+				"     folderPath: 'products/',",
+				"     mergeSchema: false,",
+				"     autoCompact: true,",
+				"     optimizedWrite: true,",
+				"     vacuum: 0,",
+				"     deletable:true,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     keys:['ProductID'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> DeleteSilver"
+			]
+		}
+	}
+}

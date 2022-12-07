@@ -1,0 +1,29 @@
+{
+	"name": "relationship-sqpyhfkgxx",
+	"properties": {
+		"Name": "relationship-sqpyhfkgxx",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Location",
+		"ToTableName": "Channel",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "LocationId",
+				"ToColumnName": "LocationId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Location.cdm.json/Location\",\"toEntity\":\"Channel.cdm.json/Channel\",\"joinPairs\":[{\"fromAttribute\":\"LocationId\",\"toAttribute\":\"LocationId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "7c3a82b6-0793-46c9-a7db-1c7d9c400372"
+	},
+	"type": "RELATIONSHIP"
+}

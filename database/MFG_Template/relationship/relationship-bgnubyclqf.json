@@ -1,0 +1,29 @@
+{
+	"name": "relationship-bgnubyclqf",
+	"properties": {
+		"Name": "relationship-bgnubyclqf",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Customer",
+		"ToTableName": "Order",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "CustomerId",
+				"ToColumnName": "CustomerId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Customer.cdm.json/Customer\",\"toEntity\":\"Order.cdm.json/Order\",\"joinPairs\":[{\"fromAttribute\":\"CustomerId\",\"toAttribute\":\"CustomerId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "14aacd85-81e4-4fcb-9f43-29b36c125cf4"
+	},
+	"type": "RELATIONSHIP"
+}

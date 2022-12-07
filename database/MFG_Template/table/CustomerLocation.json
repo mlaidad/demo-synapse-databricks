@@ -1,0 +1,235 @@
+{
+	"name": "CustomerLocation",
+	"properties": {
+		"Name": "CustomerLocation",
+		"EntityType": "TABLE",
+		"TableType": "EXTERNAL",
+		"Namespace": {
+			"SchemaName": null,
+			"DatabaseName": "MFG_Template",
+			"DatabaseId": null
+		},
+		"StorageDescriptor": {
+			"Distribution": null,
+			"Columns": [
+				{
+					"Name": "CustomerId",
+					"Description": "The unique identifier of a Customer.",
+					"OriginDataTypeName": {
+						"TypeName": "long",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "long"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerLocation.cdm.json/CustomerLocation",
+						"Name": "CustomerId"
+					}
+				},
+				{
+					"Name": "LocationTypeId",
+					"Description": "The unique identifier of a Location Type.",
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerLocation.cdm.json/CustomerLocation",
+						"Name": "LocationTypeId"
+					}
+				},
+				{
+					"Name": "LocationId",
+					"Description": "The unique identifier of a Location.",
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerLocation.cdm.json/CustomerLocation",
+						"Name": "LocationId"
+					}
+				},
+				{
+					"Name": "PeriodStartTimestamp",
+					"Description": "The period start timestamp associated with the information.",
+					"OriginDataTypeName": {
+						"TypeName": "timestamp",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"TimestampFormat": "YYYY-MM-DD HH:MM:SS.fffffffff",
+							"HIVE_TYPE_STRING": "timestamp"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerLocation.cdm.json/CustomerLocation",
+						"Name": "PeriodStartTimestamp"
+					}
+				},
+				{
+					"Name": "PeriodEndTimestamp",
+					"Description": "The period end timestamp associated with the information.",
+					"OriginDataTypeName": {
+						"TypeName": "timestamp",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"TimestampFormat": "YYYY-MM-DD HH:MM:SS.fffffffff",
+							"HIVE_TYPE_STRING": "timestamp"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerLocation.cdm.json/CustomerLocation",
+						"Name": "PeriodEndTimestamp"
+					}
+				},
+				{
+					"Name": "GlobalLocationNumber",
+					"Description": "The Global Location Number (GLN) is a simple tool used to uniquely identify locations. It can be used to identify physical locations such as a warehouse, legal entities, or a function / department within a legal entity. The GLN is part of the GS1 system of standards.",
+					"OriginDataTypeName": {
+						"TypeName": "decimal",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 0,
+						"Precision": 13,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "decimal"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerLocation.cdm.json/CustomerLocation",
+						"Name": "GlobalLocationNumber"
+					}
+				},
+				{
+					"Name": "PreferenceId",
+					"Description": "The unique identifier of a Preference.",
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerLocation.cdm.json/CustomerLocation",
+						"Name": "PreferenceId"
+					}
+				},
+				{
+					"Name": "CustomerLocationNote",
+					"Description": "A note, comment or additional information regarding a Customer Location.",
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 1024,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerLocation.cdm.json/CustomerLocation",
+						"Name": "CustomerLocationNote"
+					}
+				}
+			],
+			"ColumnSetEntityName": "ddba01c9-df0d-4645-b5cc-fcd5d55a635f",
+			"Format": {
+				"InputFormat": "org.apache.hadoop.mapred.SequenceFileInputFormat",
+				"OutputFormat": "org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat",
+				"FormatType": "csv",
+				"SerializeLib": "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe",
+				"Properties": {
+					"path": "abfss://synapse@msftsupplychainstorage.dfs.core.windows.net/MFG_Template/CustomerLocation",
+					"delimiter": ",",
+					"firstRowAsHeader": "false",
+					"multiLine": "false",
+					"serialization.format": "1",
+					"escape": "\\",
+					"quote": "\"",
+					"FormatTypeSetToDatabaseDefault": true,
+					"header": "false"
+				}
+			},
+			"Source": {
+				"Provider": "ADLS",
+				"Location": "abfss://synapse@msftsupplychainstorage.dfs.core.windows.net/MFG_Template/CustomerLocation",
+				"Properties": {
+					"LinkedServiceName": "msft-supply-chain-synapse-WorkspaceDefaultStorage",
+					"LocationSetToDatabaseDefault": true
+				}
+			},
+			"Properties": {
+				"textinputformat.record.delimiter": ",",
+				"compression": "{\"type\":\"None\",\"level\":\"optimal\"}",
+				"derivedModelAttributeInfo": "{\"attributeReferences\":{\"CustomerId\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"CustomerId\"},\"LocationTypeId\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"LocationTypeId\"},\"LocationId\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"LocationId\"},\"PeriodStartTimestamp\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"PeriodStartTimestamp\"},\"PeriodEndTimestamp\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"PeriodEndTimestamp\"},\"GlobalLocationNumber\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"GlobalLocationNumber\"},\"PreferenceId\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"PreferenceId\"},\"CustomerLocationNote\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"CustomerLocationNote\"}}}"
+			},
+			"Compressed": false,
+			"SerDeInfo": null,
+			"IsStoredAsSubdirectories": false
+		},
+		"Owner": null,
+		"CreateTime": 0,
+		"LastAccessTime": 0,
+		"Retention": 0,
+		"Temporary": false,
+		"IsRewriteEnabled": false,
+		"ViewOriginalText": null,
+		"ViewExpandedText": null,
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"OriginObjectId": null,
+		"IsSharedEntity": false,
+		"PublishStatus": "PUBLISHED",
+		"Properties": {
+			"DerivedModelEntityInfo": "{\"entityDirectives\":{\"baseEntityReference\":{\"name\":\"CustomerLocation\",\"path\":\"CustomerLocation.cdm.json/CustomerLocation\"},\"description\":\"The customer location(s) of the associated Location Type for the indicated period.\",\"primaryKey\":[\"CustomerId\",\"LocationTypeId\",\"LocationId\",\"PeriodStartTimestamp\"],\"projectionInfo\":{\"attributes\":[{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"CustomerId\"},\"dataType\":\"long\",\"description\":\"The unique identifier of a Customer.\",\"isNullable\":false,\"name\":\"CustomerId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"LocationTypeId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Location Type.\",\"isNullable\":false,\"name\":\"LocationTypeId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"LocationId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Location.\",\"isNullable\":false,\"name\":\"LocationId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"PeriodStartTimestamp\"},\"dataType\":\"timestamp\",\"description\":\"The period start timestamp associated with the information.\",\"isNullable\":false,\"name\":\"PeriodStartTimestamp\",\"timestampFormat\":\"YYYY-MM-DD HH:MM:SS.fffffffff\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"PeriodEndTimestamp\"},\"dataType\":\"timestamp\",\"description\":\"The period end timestamp associated with the information.\",\"isNullable\":true,\"name\":\"PeriodEndTimestamp\",\"timestampFormat\":\"YYYY-MM-DD HH:MM:SS.fffffffff\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"GlobalLocationNumber\"},\"dataType\":\"decimal\",\"dataTypeLength\":13,\"description\":\"The Global Location Number (GLN) is a simple tool used to uniquely identify locations. It can be used to identify physical locations such as a warehouse, legal entities, or a function / department within a legal entity. The GLN is part of the GS1 system of standards.\",\"isNullable\":true,\"scale\":0,\"name\":\"GlobalLocationNumber\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"PreferenceId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Preference.\",\"isNullable\":true,\"name\":\"PreferenceId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"name\":\"CustomerLocationNote\"},\"dataType\":\"string\",\"dataTypeLength\":1024,\"description\":\"A note, comment or additional information regarding a Customer Location.\",\"isNullable\":true,\"name\":\"CustomerLocationNote\"}]}}}",
+			"Description": "The customer location(s) of the associated Location Type for the indicated period.",
+			"DisplayFolderInfo": "{\"name\":\"Customer\",\"colorCode\":\"#022F22\"}",
+			"PrimaryKeys": "CustomerId,LocationTypeId,LocationId,PeriodStartTimestamp",
+			"EXTERNAL": "TRUE",
+			"spark.sql.sources.provider": "csv",
+			"x-ms-usageinfo": "AzureSynapseDatabaseTemplate",
+			"spark.sql.sources.schema.numParts": "1",
+			"spark.sql.sources.schema.part.0": "{\"type\":\"struct\",\"fields\":[{\"name\":\"CustomerId\",\"type\":\"long\",\"nullable\":false,\"metadata\":{}},{\"name\":\"LocationTypeId\",\"type\":\"integer\",\"nullable\":false,\"metadata\":{}},{\"name\":\"LocationId\",\"type\":\"integer\",\"nullable\":false,\"metadata\":{}},{\"name\":\"PeriodStartTimestamp\",\"type\":\"timestamp\",\"nullable\":false,\"metadata\":{}},{\"name\":\"PeriodEndTimestamp\",\"type\":\"timestamp\",\"nullable\":true,\"metadata\":{}},{\"name\":\"GlobalLocationNumber\",\"type\":\"decimal(13,0)\",\"nullable\":true,\"metadata\":{}},{\"name\":\"PreferenceId\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"CustomerLocationNote\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}}]}"
+		},
+		"ObjectVersion": 1,
+		"ObjectId": "5a68f880-e928-4f50-8f12-2bd9b182807a",
+		"Description": "The customer location(s) of the associated Location Type for the indicated period."
+	},
+	"type": "TABLE"
+}

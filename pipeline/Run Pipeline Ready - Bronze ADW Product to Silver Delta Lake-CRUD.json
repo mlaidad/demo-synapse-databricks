@@ -1,0 +1,45 @@
+{
+	"name": "Run Pipeline Ready - Bronze ADW Product to Silver Delta Lake-CRUD",
+	"properties": {
+		"activities": [
+			{
+				"name": "Pipeline Ready - Bronze ADW Product to Silver",
+				"type": "SynapseNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": "Pipeline Ready - Bronze ADW Product to Silver Delta Lake-CRUD",
+						"type": "NotebookReference"
+					},
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": "SparkSC",
+						"type": "BigDataPoolReference"
+					},
+					"executorSize": null,
+					"conf": {
+						"spark.dynamicAllocation.enabled": null,
+						"spark.dynamicAllocation.minExecutors": null,
+						"spark.dynamicAllocation.maxExecutors": null
+					},
+					"driverSize": null,
+					"numExecutors": null
+				}
+			}
+		],
+		"folder": {
+			"name": "Other"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-02T22:20:40Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

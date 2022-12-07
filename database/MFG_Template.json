@@ -1,0 +1,28 @@
+{
+	"name": "MFG_Template",
+	"properties": {
+		"Name": "MFG_Template",
+		"EntityType": "DATABASE",
+		"Description": "",
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"Properties": {
+			"DerivedModelDBInfo": "{\"ModelDirectives\":{\"BaseModel\":{\"Name\":\"Manufacturing\",\"Version\":\"0.1.0\"}}}",
+			"IsSyMSCDMDatabase": true,
+			"x-ms-usageinfo": "AzureSynapseDatabaseTemplate"
+		},
+		"Source": {
+			"Provider": "ADLS",
+			"Location": "abfss://synapse@msftsupplychainstorage.dfs.core.windows.net/MFG_Template",
+			"Properties": {
+				"FormatType": "csv",
+				"LinkedServiceName": "msft-supply-chain-synapse-WorkspaceDefaultStorage"
+			}
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "216b48b8-4e42-4fed-98e7-8f6e3d8955fe"
+	},
+	"type": "DATABASE"
+}

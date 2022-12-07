@@ -1,0 +1,45 @@
+{
+	"name": "Run ADW_Product_to_Silver",
+	"properties": {
+		"activities": [
+			{
+				"name": "ADW_Product_to_Silver",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "ADW_Product_to_Silver",
+						"type": "DataFlowReference",
+						"parameters": {
+							"SourceDatabase": "'adventureworkslt'"
+						},
+						"datasetParameters": {
+							"BronzeProduct": {
+								"SourceDatabase": "adventureworkslt"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "Demo"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-03T19:42:42Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

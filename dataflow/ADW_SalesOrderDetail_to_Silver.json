@@ -1,0 +1,101 @@
+{
+	"name": "ADW_SalesOrderDetail_to_Silver",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeSalesOrderDetail"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					},
+					"name": "OutputtoSilver",
+					"rejectedDataLinkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectSalesOrderDetail"
+				},
+				{
+					"name": "DerivedColumnSalesOrderDetail"
+				},
+				{
+					"name": "alterRow"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     SourceDatabase as string",
+				"}",
+				"source(output(",
+				"          SalesOrderID as integer,",
+				"          SalesOrderDetailID as integer,",
+				"          OrderQty as short,",
+				"          ProductID as short,",
+				"          UnitPrice as double,",
+				"          UnitPriceDiscount as double,",
+				"          LineTotal as double,",
+				"          rowguid as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['SalesLT/SalesOrderDetail/new/','SalesLT/SalesOrderDetail/imported/'],",
+				"     wildcardPaths:['SalesLT/SalesOrderDetail/new/*.csv']) ~> BronzeSalesOrderDetail",
+				"BronzeSalesOrderDetail select(mapColumn(",
+				"          OrderID = SalesOrderID,",
+				"          OrderLineID = SalesOrderDetailID,",
+				"          Quantity = OrderQty,",
+				"          ProductID,",
+				"          UnitPrice,",
+				"          UnitPriceDiscount,",
+				"          LineTotal,",
+				"          ModifiedDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectSalesOrderDetail",
+				"SelectSalesOrderDetail derive(OrderID = concat('ADV-', toString(OrderID)),",
+				"          OrderLineID = concat('ADV-', toString(OrderLineID)),",
+				"          ProductID = concat('ADV-', toString(ProductID)),",
+				"          ModifiedDate = toTimestamp(ModifiedDate),",
+				"          Source = 'AdventureWorksLT') ~> DerivedColumnSalesOrderDetail",
+				"DerivedColumnSalesOrderDetail alterRow(upsertIf(isNull(OrderLineID)==false())) ~> alterRow",
+				"alterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     compressionType: 'snappy',",
+				"     compressionLevel: 'Fastest',",
+				"     fileSystem: 'sales',",
+				"     folderPath: 'salesorderdetail/',",
+				"     mergeSchema: false,",
+				"     autoCompact: true,",
+				"     optimizedWrite: true,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['OrderLineID'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> OutputtoSilver"
+			]
+		}
+	}
+}

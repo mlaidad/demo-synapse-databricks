@@ -1,0 +1,29 @@
+{
+	"name": "relationship-gckyzxjizw",
+	"properties": {
+		"Name": "relationship-gckyzxjizw",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Location",
+		"ToTableName": "CustomerLocation",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "LocationId",
+				"ToColumnName": "LocationId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Location.cdm.json/Location\",\"toEntity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"joinPairs\":[{\"fromAttribute\":\"LocationId\",\"toAttribute\":\"LocationId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "2bfed6ba-13d8-49b8-8f61-f7ba021f760c"
+	},
+	"type": "RELATIONSHIP"
+}

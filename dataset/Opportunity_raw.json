@@ -1,0 +1,22 @@
+{
+	"name": "Opportunity_raw",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "demo-synapse-databricks-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "opportunity.parquet",
+				"folderPath": "opportunity",
+				"fileSystem": "raw"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

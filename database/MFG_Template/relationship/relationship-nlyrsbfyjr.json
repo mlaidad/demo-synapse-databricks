@@ -1,0 +1,29 @@
+{
+	"name": "relationship-nlyrsbfyjr",
+	"properties": {
+		"Name": "relationship-nlyrsbfyjr",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Country",
+		"ToTableName": "Document",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "CountryId",
+				"ToColumnName": "CountryId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Country.cdm.json/Country\",\"toEntity\":\"Document.cdm.json/Document\",\"joinPairs\":[{\"fromAttribute\":\"CountryId\",\"toAttribute\":\"CountryId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "2de18722-741f-4fed-af2b-f055012de72e"
+	},
+	"type": "RELATIONSHIP"
+}

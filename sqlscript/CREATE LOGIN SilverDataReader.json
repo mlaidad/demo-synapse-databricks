@@ -1,0 +1,17 @@
+{
+	"name": "CREATE LOGIN SilverDataReader",
+	"properties": {
+		"content": {
+			"query": "CREATE LOGIN SilverDataReader WITH PASSWORD = 'S1lv3rD@t@R3@d3r';\n\nCREATE USER SilverDataReader FROM LOGIN SilverDataReader;\n\nALTER ROLE db_datareader ADD MEMBER SilverDataReader;\n\n--GRANT SELECT ON vwSilverProducts TO SilverDataReader;  \n\nGRANT REFERENCES ON DATABASE SCOPED CREDENTIAL::[WorkspaceIdentity] TO [SilverDataReader];\n\n-- If an AD Provider, we need to use the following...\n\nCREATE USER [alias@microsoft.com] FROM EXTERNAL PROVIDER;\n\nALTER ROLE db_datareader ADD MEMBER [alias@microsoft.com];\n\nGRANT SELECT ON vwcostsclaim TO [alias@microsoft.com];  \nGRANT SELECT ON vwfinance TO [alias@microsoft.com];  \n\nGRANT REFERENCES ON DATABASE SCOPED CREDENTIAL::[WorkspaceIdentity] TO [alias@microsoft.com];\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SilverLayer",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

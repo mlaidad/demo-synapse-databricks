@@ -1,0 +1,205 @@
+{
+	"name": "ADW_Customers_to_Silver",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeCustomer"
+				},
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeCustomerAddress"
+				},
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeAddress"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					},
+					"name": "OutputtoSilver",
+					"rejectedDataLinkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "CustomerDerivedColumn"
+				},
+				{
+					"name": "CustomerAddressDerivedColumn"
+				},
+				{
+					"name": "AddressDerivedColumn"
+				},
+				{
+					"name": "AddressJoin"
+				},
+				{
+					"name": "SelectAddress"
+				},
+				{
+					"name": "CustomerJoin"
+				},
+				{
+					"name": "SelectCustomer"
+				},
+				{
+					"name": "FilterAddress"
+				},
+				{
+					"name": "alterRow"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     SourceDatabase as string",
+				"}",
+				"source(output(",
+				"          CustomerID as short,",
+				"          NameStyle as boolean,",
+				"          Title as string,",
+				"          FirstName as string,",
+				"          MiddleName as string,",
+				"          LastName as string,",
+				"          Suffix as string,",
+				"          CompanyName as string,",
+				"          SalesPerson as string,",
+				"          EmailAddress as string,",
+				"          Phone as string,",
+				"          PasswordHash as string,",
+				"          PasswordSalt as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['SalesLT/Customer/new/','SalesLT/Customer/imported/'],",
+				"     wildcardPaths:['SalesLT/Customer/new/*.csv']) ~> BronzeCustomer",
+				"source(output(",
+				"          CustomerID as short,",
+				"          AddressID as short,",
+				"          AddressType as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['SalesLT/CustomerAddress/new/','SalesLT/CustomerAddress/imported/'],",
+				"     wildcardPaths:['SalesLT/CustomerAddress/new/*.csv']) ~> BronzeCustomerAddress",
+				"source(output(",
+				"          AddressID as short,",
+				"          AddressLine1 as string,",
+				"          AddressLine2 as string,",
+				"          City as string,",
+				"          StateProvince as string,",
+				"          CountryRegion as string,",
+				"          PostalCode as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['SalesLT/Address/new/','SalesLT/Address/imported'],",
+				"     wildcardPaths:['SalesLT/Address/new/*.csv']) ~> BronzeAddress",
+				"BronzeCustomer derive(CustomerID = concat('ADV-', toString(CustomerID)),",
+				"          ModifiedDate = toTimestamp(ModifiedDate),",
+				"          Source = 'AdventureWorksLT') ~> CustomerDerivedColumn",
+				"BronzeCustomerAddress derive(CustomerID = concat('ADV-', toString(CustomerID)),",
+				"          AddressID = concat('ADV-', toString(AddressID)),",
+				"          ModifiedDate = toTimestamp(ModifiedDate)) ~> CustomerAddressDerivedColumn",
+				"BronzeAddress derive(AddressID = concat('ADV-', toString(AddressID)),",
+				"          ModifiedDate = toTimestamp(ModifiedDate)) ~> AddressDerivedColumn",
+				"CustomerAddressDerivedColumn, AddressDerivedColumn join(CustomerAddressDerivedColumn@AddressID == AddressDerivedColumn@AddressID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> AddressJoin",
+				"AddressJoin select(mapColumn(",
+				"          CustomerID,",
+				"          AddressID = AddressDerivedColumn@AddressID,",
+				"          AddressType,",
+				"          AddressLine1,",
+				"          AddressLine2,",
+				"          City,",
+				"          StateProvince,",
+				"          CountryRegion,",
+				"          PostalCode,",
+				"          ModifiedDate = AddressDerivedColumn@ModifiedDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectAddress",
+				"CustomerDerivedColumn, FilterAddress join(CustomerDerivedColumn@CustomerID == SelectAddress@CustomerID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> CustomerJoin",
+				"CustomerJoin select(mapColumn(",
+				"          CustomerID = CustomerDerivedColumn@CustomerID,",
+				"          FirstName,",
+				"          LastName,",
+				"          CompanyName,",
+				"          SalesPerson,",
+				"          EmailAddress,",
+				"          Phone,",
+				"          AddressID,",
+				"          AddressType,",
+				"          AddressLine1,",
+				"          AddressLine2,",
+				"          City,",
+				"          StateProvince,",
+				"          CountryRegion,",
+				"          PostalCode,",
+				"          ModifiedDate = CustomerDerivedColumn@ModifiedDate,",
+				"          ModifiedDate = SelectAddress@ModifiedDate,",
+				"          Source",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectCustomer",
+				"SelectAddress filter(AddressType == 'Main Office') ~> FilterAddress",
+				"SelectCustomer alterRow(upsertIf(isNull(CustomerID)==false())) ~> alterRow",
+				"alterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     compressionType: 'snappy',",
+				"     compressionLevel: 'Fastest',",
+				"     fileSystem: 'sales',",
+				"     folderPath: 'customers/',",
+				"     mergeSchema: false,",
+				"     autoCompact: true,",
+				"     optimizedWrite: true,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['CustomerID'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> OutputtoSilver"
+			]
+		}
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"name": "relationship-gazdhvaymu",
+	"properties": {
+		"Name": "relationship-gazdhvaymu",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Timezone",
+		"ToTableName": "Location",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "TimezoneId",
+				"ToColumnName": "TimezoneId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Timezone.cdm.json/Timezone\",\"toEntity\":\"Location.cdm.json/Location\",\"joinPairs\":[{\"fromAttribute\":\"TimezoneId\",\"toAttribute\":\"TimezoneId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "b6d0470f-db94-42f8-98d9-7566aa8e3d55"
+	},
+	"type": "RELATIONSHIP"
+}

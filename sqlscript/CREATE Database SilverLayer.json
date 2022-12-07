@@ -1,0 +1,17 @@
+{
+	"name": "CREATE Database SilverLayer",
+	"properties": {
+		"content": {
+			"query": "CREATE DATABASE SilverLayer;\n\n-- create master key that will protect the credentials:\nCREATE MASTER KEY ENCRYPTION BY PASSWORD = 'S1lv3rL@y3r'\n\n-- create credentials for containers in our demo storage account\nCREATE DATABASE SCOPED CREDENTIAL WorkspaceIdentity WITH IDENTITY = 'Managed Identity'\n\n-- CREATE EXTERNAL DATA SOURCE SqlOnDemandMI\n\nCREATE EXTERNAL DATA SOURCE SqlOnDemandMI WITH (\n    LOCATION = 'https://demosynapsesilver.blob.core.windows.net',\n    CREDENTIAL = WorkspaceIdentity\n);\nGO\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SilverLayer",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

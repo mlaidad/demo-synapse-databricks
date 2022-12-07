@@ -1,0 +1,114 @@
+{
+	"name": "WWI_StockItems_to_Silver",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeStockItems"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					},
+					"name": "OutputtoSilver",
+					"rejectedDataLinkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectStockItems"
+				},
+				{
+					"name": "DerivedColumnStockItems"
+				},
+				{
+					"name": "alterRow"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     SourceDatabase as string",
+				"}",
+				"source(output(",
+				"          StockItemID as short,",
+				"          StockItemName as string,",
+				"          SupplierID as short,",
+				"          ColorID as short,",
+				"          UnitPackageID as short,",
+				"          OuterPackageID as short,",
+				"          Brand as string,",
+				"          Size as string,",
+				"          LeadTimeDays as short,",
+				"          QuantityPerOuter as short,",
+				"          IsChillerStock as boolean,",
+				"          Barcode as long,",
+				"          TaxRate as double,",
+				"          UnitPrice as double,",
+				"          RecommendedRetailPrice as double,",
+				"          TypicalWeightPerUnit as double,",
+				"          MarketingComments as string,",
+				"          InternalComments as string,",
+				"          Photo as string,",
+				"          CustomFields as string,",
+				"          Tags as string,",
+				"          SearchDetails as string,",
+				"          LastEditedBy as boolean,",
+				"          ValidFrom as string,",
+				"          ValidTo as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['Warehouse/StockItems/new/','Warehouse/StockItems/imported/'],",
+				"     wildcardPaths:['Warehouse/StockItems/new/*.csv']) ~> BronzeStockItems",
+				"BronzeStockItems select(mapColumn(",
+				"          ProductID = StockItemID,",
+				"          ProductName = StockItemName,",
+				"          UnitPrice,",
+				"          RetailPrice = RecommendedRetailPrice,",
+				"          ModifiedDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectStockItems",
+				"SelectStockItems derive(ProductID = concat('WWI-', toString(ProductID)),",
+				"          ProductNumber = 'NULL',",
+				"          ModifiedDate = toTimestamp(ModifiedDate),",
+				"          Source = 'WideWorldImporters') ~> DerivedColumnStockItems",
+				"DerivedColumnStockItems alterRow(upsertIf(isNull(ProductID)==false())) ~> alterRow",
+				"alterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     compressionType: 'snappy',",
+				"     compressionLevel: 'Fastest',",
+				"     fileSystem: 'sales',",
+				"     folderPath: 'products/',",
+				"     mergeSchema: false,",
+				"     autoCompact: true,",
+				"     optimizedWrite: true,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['ProductID'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> OutputtoSilver"
+			]
+		}
+	}
+}

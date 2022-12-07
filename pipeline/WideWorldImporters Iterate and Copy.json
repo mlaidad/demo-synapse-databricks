@@ -1,0 +1,268 @@
+{
+	"name": "WideWorldImporters Iterate and Copy",
+	"properties": {
+		"activities": [
+			{
+				"name": "IterateSQLTables",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.tableList",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "LookupNewWaterMarkActivity",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "select MAX(ModifiedDate) as NewWatermarkValue from [@{item().TableSchema}].[@{item().TableName}]",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "WideWorldImporters",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "LookupOldWaterMarkActivity",
+							"type": "Lookup",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "select * from [dbo].[watermarkdemo] where TableSchema = '@{item().TableSchema}' and TableName = '@{item().TableName}' and SourceDatabase = '@{item().SourceDatabase}'",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "DATAFACTORY",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "GetChangeCount",
+							"type": "Lookup",
+							"dependsOn": [
+								{
+									"activity": "LookupOldWaterMarkActivity",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								},
+								{
+									"activity": "LookupNewWaterMarkActivity",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"sqlReaderQuery": {
+										"value": "select count(*) as changecount from [@{item().TableSchema}].[@{item().TableName}] \n\nwhere modifieddate > '@{activity('LookupOldWaterMarkActivity').output.firstRow.WatermarkValue}'  \n\nand modifieddate <= '@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}'",
+										"type": "Expression"
+									},
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"dataset": {
+									"referenceName": "WideWorldImporters",
+									"type": "DatasetReference"
+								}
+							}
+						},
+						{
+							"name": "HasChangedRows",
+							"type": "IfCondition",
+							"dependsOn": [
+								{
+									"activity": "GetChangeCount",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"expression": {
+									"value": "@greater(int(activity('GetChangeCount').output.firstRow.changecount),0)",
+									"type": "Expression"
+								},
+								"ifTrueActivities": [
+									{
+										"name": "Copy data",
+										"type": "Copy",
+										"dependsOn": [],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"source": {
+												"type": "AzureSqlSource",
+												"sqlReaderQuery": {
+													"value": "select * from [@{item().TableSchema}].[@{item().TableName}] \r\n\r\nwhere modifieddate > '@{activity('LookupOldWaterMarkActivity').output.firstRow.WatermarkValue}'  \r\n\r\nand modifieddate <= '@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}'",
+													"type": "Expression"
+												},
+												"queryTimeout": "02:00:00",
+												"partitionOption": "None"
+											},
+											"sink": {
+												"type": "DelimitedTextSink",
+												"storeSettings": {
+													"type": "AzureBlobFSWriteSettings"
+												},
+												"formatSettings": {
+													"type": "DelimitedTextWriteSettings",
+													"quoteAllText": true,
+													"fileExtension": ".txt"
+												}
+											},
+											"enableStaging": false,
+											"translator": {
+												"type": "TabularTranslator",
+												"typeConversion": true,
+												"typeConversionSettings": {
+													"allowDataTruncation": true,
+													"treatBooleanAsNumber": false
+												}
+											}
+										},
+										"inputs": [
+											{
+												"referenceName": "WideWorldImporters",
+												"type": "DatasetReference"
+											}
+										],
+										"outputs": [
+											{
+												"referenceName": "BronzeLayer",
+												"type": "DatasetReference",
+												"parameters": {
+													"TableName": "@{item().TableName}",
+													"TableSchema": "@{item().TableSchema}",
+													"SourceDatabase": "@{item().SourceDatabase}"
+												}
+											}
+										]
+									},
+									{
+										"name": "WriteWatermarkActivity",
+										"type": "SqlServerStoredProcedure",
+										"dependsOn": [
+											{
+												"activity": "Copy data",
+												"dependencyConditions": [
+													"Succeeded"
+												]
+											}
+										],
+										"policy": {
+											"timeout": "7.00:00:00",
+											"retry": 0,
+											"retryIntervalInSeconds": 30,
+											"secureOutput": false,
+											"secureInput": false
+										},
+										"userProperties": [],
+										"typeProperties": {
+											"storedProcedureName": "[dbo].[sp_write_watermarkdemo_with_sourcedatabase]",
+											"storedProcedureParameters": {
+												"LastModifiedtime": {
+													"value": {
+														"value": "@{activity('LookupNewWaterMarkActivity').output.firstRow.NewWatermarkvalue}",
+														"type": "Expression"
+													},
+													"type": "DateTime"
+												},
+												"SourceDatabase": {
+													"value": {
+														"value": "@{activity('LookupOldWaterMarkActivity').output.firstRow.SourceDatabase}",
+														"type": "Expression"
+													},
+													"type": "String"
+												},
+												"TableName": {
+													"value": {
+														"value": "@{activity('LookupOldWaterMarkActivity').output.firstRow.TableName}",
+														"type": "Expression"
+													},
+													"type": "String"
+												},
+												"TableSchema": {
+													"value": {
+														"value": "@{activity('LookupOldWaterMarkActivity').output.firstRow.TableSchema}",
+														"type": "Expression"
+													},
+													"type": "String"
+												}
+											}
+										},
+										"linkedServiceName": {
+											"referenceName": "DATAFACTORY_jobender",
+											"type": "LinkedServiceReference"
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"tableList": {
+				"type": "array"
+			}
+		},
+		"folder": {
+			"name": "Demo"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-02T22:21:13Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

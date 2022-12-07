@@ -1,0 +1,29 @@
+{
+	"name": "relationship-njvsgiapmd",
+	"properties": {
+		"Name": "relationship-njvsgiapmd",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Country",
+		"ToTableName": "Location",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "CountryId",
+				"ToColumnName": "CountryId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Country.cdm.json/Country\",\"toEntity\":\"Location.cdm.json/Location\",\"joinPairs\":[{\"fromAttribute\":\"CountryId\",\"toAttribute\":\"CountryId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "fe20de57-6819-473b-bcfb-257a7ac8d759"
+	},
+	"type": "RELATIONSHIP"
+}

@@ -1,0 +1,105 @@
+{
+	"name": "ADW_Product_to_Silver",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeProduct"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					},
+					"name": "OutputtoSilver",
+					"rejectedDataLinkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectProduct"
+				},
+				{
+					"name": "DerivedColumnProduct"
+				},
+				{
+					"name": "alterRow"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     SourceDatabase as string",
+				"}",
+				"source(output(",
+				"          ProductID as short,",
+				"          Name as string,",
+				"          ProductNumber as string,",
+				"          Color as string,",
+				"          StandardCost as double,",
+				"          ListPrice as double,",
+				"          Size as string,",
+				"          Weight as double,",
+				"          ProductCategoryID as short,",
+				"          ProductModelID as short,",
+				"          SellStartDate as string,",
+				"          SellEndDate as string,",
+				"          DiscontinuedDate as string,",
+				"          ThumbNailPhoto as string,",
+				"          ThumbnailPhotoFileName as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['SalesLT/Product/new/','SalesLT/Product/imported/'],",
+				"     wildcardPaths:['SalesLT/Product/new/*.csv']) ~> BronzeProduct",
+				"BronzeProduct select(mapColumn(",
+				"          ProductID,",
+				"          ProductName = Name,",
+				"          ProductNumber,",
+				"          UnitPrice = StandardCost,",
+				"          RetailPrice = ListPrice,",
+				"          ModifiedDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectProduct",
+				"SelectProduct derive(ProductID = concat('ADV-', toString(ProductID)),",
+				"          ModifiedDate = toTimestamp(ModifiedDate),",
+				"          Source = 'AdventureWorksLT') ~> DerivedColumnProduct",
+				"DerivedColumnProduct alterRow(upsertIf(isNull(ProductID)==false())) ~> alterRow",
+				"alterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     compressionType: 'snappy',",
+				"     compressionLevel: 'Fastest',",
+				"     fileSystem: 'sales',",
+				"     folderPath: 'products/',",
+				"     mergeSchema: false,",
+				"     autoCompact: true,",
+				"     optimizedWrite: true,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['ProductID'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> OutputtoSilver"
+			]
+		}
+	}
+}

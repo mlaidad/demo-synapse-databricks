@@ -1,0 +1,29 @@
+{
+	"name": "relationship-yrgmjkazcg",
+	"properties": {
+		"Name": "relationship-yrgmjkazcg",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Communication",
+		"ToTableName": "Document",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "CommunicationId",
+				"ToColumnName": "DocumentId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Communication.cdm.json/Communication\",\"toEntity\":\"Document.cdm.json/Document\",\"joinPairs\":[{\"fromAttribute\":\"CommunicationId\",\"toAttribute\":\"DocumentId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "b0033000-df2c-4a3e-8b78-c5c6e3176d5a"
+	},
+	"type": "RELATIONSHIP"
+}

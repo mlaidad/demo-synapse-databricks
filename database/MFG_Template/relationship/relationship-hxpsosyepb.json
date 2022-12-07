@@ -1,0 +1,29 @@
+{
+	"name": "relationship-hxpsosyepb",
+	"properties": {
+		"Name": "relationship-hxpsosyepb",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "LocationType",
+		"ToTableName": "CustomerLocation",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "LocationTypeId",
+				"ToColumnName": "LocationTypeId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"LocationType.cdm.json/LocationType\",\"toEntity\":\"CustomerLocation.cdm.json/CustomerLocation\",\"joinPairs\":[{\"fromAttribute\":\"LocationTypeId\",\"toAttribute\":\"LocationTypeId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "b832ea68-7761-4255-a813-ae98fb5e3d1a"
+	},
+	"type": "RELATIONSHIP"
+}

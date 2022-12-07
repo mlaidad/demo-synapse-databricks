@@ -1,0 +1,29 @@
+{
+	"name": "relationship-rhppqlxrhj",
+	"properties": {
+		"Name": "relationship-rhppqlxrhj",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Country",
+		"ToTableName": "ManufacturingProduct",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "CountryId",
+				"ToColumnName": "PrimaryCountryOfOriginCountryId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Country.cdm.json/Country\",\"toEntity\":\"ManufacturingProduct.cdm.json/ManufacturingProduct\",\"joinPairs\":[{\"fromAttribute\":\"CountryId\",\"toAttribute\":\"PrimaryCountryOfOriginCountryId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "cd7f60b8-dc26-4ebd-8066-e26e22a2a2f0"
+	},
+	"type": "RELATIONSHIP"
+}

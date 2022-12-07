@@ -1,0 +1,45 @@
+{
+	"name": "SilverDataLake",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Supply_Chain_Synapse_Serverless",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ProductID",
+				"type": "varchar"
+			},
+			{
+				"name": "ProductName",
+				"type": "varchar"
+			},
+			{
+				"name": "ProductNumber",
+				"type": "varchar"
+			},
+			{
+				"name": "UnitPrice",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "RetailPrice",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "ModifiedDate",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "Source",
+				"type": "varchar"
+			}
+		]
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

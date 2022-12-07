@@ -1,0 +1,109 @@
+{
+	"name": "WWI_Orders_to_Silver",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeOrders"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					},
+					"name": "OutputtoSilver",
+					"rejectedDataLinkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectOrders"
+				},
+				{
+					"name": "DerivedColumnOrders"
+				},
+				{
+					"name": "alterRow"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     SourceDatabase as string",
+				"}",
+				"source(output(",
+				"          OrderID as short,",
+				"          CustomerID as short,",
+				"          SalespersonPersonID as short,",
+				"          PickedByPersonID as short,",
+				"          ContactPersonID as short,",
+				"          BackorderOrderID as short,",
+				"          OrderDate as string,",
+				"          ExpectedDeliveryDate as string,",
+				"          CustomerPurchaseOrderNumber as short,",
+				"          IsUndersupplyBackordered as boolean,",
+				"          Comments as string,",
+				"          DeliveryInstructions as string,",
+				"          InternalComments as string,",
+				"          PickingCompletedWhen as string,",
+				"          LastEditedBy as short,",
+				"          LastEditedWhen as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['Sales/Orders/new/','Sales/Orders/imported/'],",
+				"     wildcardPaths:['Sales/Orders/new/*.csv']) ~> BronzeOrders",
+				"BronzeOrders select(mapColumn(",
+				"          OrderID,",
+				"          CustomerID,",
+				"          OrderDate,",
+				"          DueDate = ExpectedDeliveryDate,",
+				"          PONumber = CustomerPurchaseOrderNumber,",
+				"          ModifiedDate = LastEditedWhen",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectOrders",
+				"SelectOrders derive(OrderID = concat('WWI-', toString(OrderID)),",
+				"          CustomerID = concat('WWI-', toString(CustomerID)),",
+				"          OrderDate = toTimestamp(OrderDate),",
+				"          DueDate = toTimestamp(DueDate),",
+				"          PONumber = toString(PONumber),",
+				"          ModifiedDate = toTimestamp(ModifiedDate),",
+				"          Source = 'WideWorldImporters') ~> DerivedColumnOrders",
+				"DerivedColumnOrders alterRow(upsertIf(isNull(OrderID)==false())) ~> alterRow",
+				"alterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     compressionType: 'snappy',",
+				"     compressionLevel: 'Fastest',",
+				"     fileSystem: 'sales',",
+				"     folderPath: 'salesorderheader/',",
+				"     mergeSchema: false,",
+				"     autoCompact: true,",
+				"     optimizedWrite: true,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['OrderID'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> OutputtoSilver"
+			]
+		}
+	}
+}

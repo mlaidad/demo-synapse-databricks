@@ -1,0 +1,42 @@
+{
+	"name": "WideWorldImporters",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "WideWorldImporters_jobender",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "PaymentMethodID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "PaymentMethodName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "LastEditedBy",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ValidFrom",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "ValidTo",
+				"type": "datetime2",
+				"scale": 7
+			}
+		],
+		"typeProperties": {
+			"schema": "Application",
+			"table": "PaymentMethods"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

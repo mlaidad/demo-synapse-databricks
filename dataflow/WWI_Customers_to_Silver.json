@@ -1,0 +1,275 @@
+{
+	"name": "WWI_Customers_to_Silver",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeCustomers"
+				},
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeCities"
+				},
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeStateProvinces"
+				},
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeCountries"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					},
+					"name": "OutputtoSilver",
+					"rejectedDataLinkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "CustomersDerivedColumn"
+				},
+				{
+					"name": "SelectCities"
+				},
+				{
+					"name": "SelectStateProvinces"
+				},
+				{
+					"name": "SelectCountries"
+				},
+				{
+					"name": "JoinStateProvincesCountries"
+				},
+				{
+					"name": "JoinCitiesStateProvinces"
+				},
+				{
+					"name": "FilterCustomers"
+				},
+				{
+					"name": "JoinCustomersCities"
+				},
+				{
+					"name": "SelectCustomers"
+				},
+				{
+					"name": "alterRow"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     SourceDatabase as string",
+				"}",
+				"source(output(",
+				"          CustomerID as string,",
+				"          CustomerName as string,",
+				"          BillToCustomerID as short,",
+				"          CustomerCategoryID as short,",
+				"          BuyingGroupID as short,",
+				"          PrimaryContactPersonID as short,",
+				"          AlternateContactPersonID as short,",
+				"          DeliveryMethodID as short,",
+				"          DeliveryCityID as integer,",
+				"          PostalCityID as integer,",
+				"          CreditLimit as double,",
+				"          AccountOpenedDate as string,",
+				"          StandardDiscountPercentage as double,",
+				"          IsStatementSent as boolean,",
+				"          IsOnCreditHold as boolean,",
+				"          PaymentDays as short,",
+				"          PhoneNumber as string,",
+				"          FaxNumber as string,",
+				"          DeliveryRun as string,",
+				"          RunPosition as string,",
+				"          WebsiteURL as string,",
+				"          DeliveryAddressLine1 as string,",
+				"          DeliveryAddressLine2 as string,",
+				"          DeliveryPostalCode as integer,",
+				"          DeliveryLocation as string,",
+				"          PostalAddressLine1 as string,",
+				"          PostalAddressLine2 as string,",
+				"          PostalPostalCode as integer,",
+				"          LastEditedBy as short,",
+				"          ValidFrom as string,",
+				"          ValidTo as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['Sales/Customers/new/','Sales/Customers/imported/'],",
+				"     wildcardPaths:['Sales/Customers/new/*.csv']) ~> BronzeCustomers",
+				"source(output(",
+				"          CityID as short,",
+				"          CityName as string,",
+				"          StateProvinceID as short,",
+				"          Location as string,",
+				"          LatestRecordedPopulation as integer,",
+				"          LastEditedBy as short,",
+				"          ValidFrom as string,",
+				"          ValidTo as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['Application/Cities/new/','Application/Cities/imported/'],",
+				"     wildcardPaths:['Application/Cities/new/*.csv']) ~> BronzeCities",
+				"source(output(",
+				"          StateProvinceID as short,",
+				"          StateProvinceCode as string,",
+				"          StateProvinceName as string,",
+				"          CountryID as short,",
+				"          SalesTerritory as string,",
+				"          Border as string,",
+				"          LatestRecordedPopulation as string,",
+				"          LastEditedBy as string,",
+				"          ValidFrom as string,",
+				"          ValidTo as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['Application/StateProvinces/new/','Application/StateProvinces/imported/'],",
+				"     wildcardPaths:['Application/StateProvinces/new/*.csv']) ~> BronzeStateProvinces",
+				"source(output(",
+				"          CountryID as short,",
+				"          CountryName as string,",
+				"          FormalName as string,",
+				"          IsoAlpha3Code as string,",
+				"          IsoNumericCode as short,",
+				"          CountryType as string,",
+				"          LatestRecordedPopulation as integer,",
+				"          Continent as string,",
+				"          Region as string,",
+				"          Subregion as string,",
+				"          Border as string,",
+				"          LastEditedBy as string,",
+				"          ValidFrom as string,",
+				"          ValidTo as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['Application/Countries/new/','Application/Countries/imported/'],",
+				"     wildcardPaths:['Application/Countries/new/*.csv']) ~> BronzeCountries",
+				"FilterCustomers derive(CustomerID = concat('WWI-', toString(CustomerID)),",
+				"          FirstName = left(CustomerName, (instr(CustomerName,' ')-1)),",
+				"          LastName = substring(CustomerName, (instr(CustomerName,' ')+1), 25),",
+				"          CompanyName = 'NULL',",
+				"          EmailAddress = 'NULL',",
+				"          AddressID = 'NULL',",
+				"          AddressType = 'Delivery',",
+				"          Source = 'WideWorldImporters',",
+				"          ModifiedDate = toTimestamp(ModifiedDate),",
+				"          DeliveryPostalCode = toString(DeliveryPostalCode)) ~> CustomersDerivedColumn",
+				"BronzeCities select(mapColumn(",
+				"          CityID,",
+				"          CityName,",
+				"          StateProvinceID",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectCities",
+				"BronzeStateProvinces select(mapColumn(",
+				"          StateProvinceID,",
+				"          StateProvinceCode,",
+				"          StateProvinceName,",
+				"          CountryID,",
+				"          SalesTerritory",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectStateProvinces",
+				"BronzeCountries select(mapColumn(",
+				"          CountryID,",
+				"          CountryName,",
+				"          Region",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectCountries",
+				"SelectStateProvinces, SelectCountries join(SelectStateProvinces@CountryID == SelectCountries@CountryID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> JoinStateProvincesCountries",
+				"SelectCities, JoinStateProvincesCountries join(SelectCities@StateProvinceID == SelectStateProvinces@StateProvinceID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> JoinCitiesStateProvinces",
+				"BronzeCustomers filter(isNull(BuyingGroupID)) ~> FilterCustomers",
+				"CustomersDerivedColumn, JoinCitiesStateProvinces join(DeliveryCityID == CityID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> JoinCustomersCities",
+				"JoinCustomersCities select(mapColumn(",
+				"          CustomerID,",
+				"          FirstName,",
+				"          LastName,",
+				"          CompanyName,",
+				"          SalesPerson = SalesTerritory,",
+				"          EmailAddress,",
+				"          Phone = PhoneNumber,",
+				"          AddressID,",
+				"          AddressType,",
+				"          AddressLine1 = DeliveryAddressLine2,",
+				"          AddressLine2 = DeliveryAddressLine1,",
+				"          City = CityName,",
+				"          StateProvince = StateProvinceName,",
+				"          CountryRegion = CountryName,",
+				"          PostalCode = DeliveryPostalCode,",
+				"          ModifiedDate,",
+				"          Source",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectCustomers",
+				"SelectCustomers alterRow(upsertIf(isNull(CustomerID)==false())) ~> alterRow",
+				"alterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     compressionType: 'snappy',",
+				"     compressionLevel: 'Fastest',",
+				"     fileSystem: 'sales',",
+				"     folderPath: 'customers',",
+				"     mergeSchema: false,",
+				"     autoCompact: true,",
+				"     optimizedWrite: true,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['CustomerID'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> OutputtoSilver"
+			]
+		}
+	}
+}

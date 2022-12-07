@@ -1,0 +1,29 @@
+{
+	"name": "relationship-qzijoubsmg",
+	"properties": {
+		"Name": "relationship-qzijoubsmg",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Employee",
+		"ToTableName": "Transaction",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "EmployeeId",
+				"ToColumnName": "ApprovedByEmployeeId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Employee.cdm.json/Employee\",\"toEntity\":\"Transaction.cdm.json/Transaction\",\"joinPairs\":[{\"fromAttribute\":\"EmployeeId\",\"toAttribute\":\"ApprovedByEmployeeId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "63f1352b-d0fa-4548-ad10-741e2fd7bb0a"
+	},
+	"type": "RELATIONSHIP"
+}

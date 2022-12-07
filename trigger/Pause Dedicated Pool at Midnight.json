@@ -1,0 +1,39 @@
+{
+	"name": "Pause Dedicated Pool at Midnight",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Pause Dedicated Pool",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"ResourceGroup": "supplychainsynapse",
+					"SubscriptionID": "3a99ffce-3379-4883-8224-ca35bbb5f4c8",
+					"WorkspaceName": "supply-chain-synapse",
+					"SQLPoolName": "AdventureWorks",
+					"PauseorResume": "Pause"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Day",
+				"interval": 1,
+				"startTime": "2022-09-22T10:43:00",
+				"timeZone": "Eastern Standard Time",
+				"schedule": {
+					"minutes": [
+						0
+					],
+					"hours": [
+						0
+					]
+				}
+			}
+		}
+	}
+}

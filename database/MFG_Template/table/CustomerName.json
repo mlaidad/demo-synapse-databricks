@@ -1,0 +1,157 @@
+{
+	"name": "CustomerName",
+	"properties": {
+		"Name": "CustomerName",
+		"EntityType": "TABLE",
+		"TableType": "EXTERNAL",
+		"Namespace": {
+			"SchemaName": null,
+			"DatabaseName": "MFG_Template",
+			"DatabaseId": null
+		},
+		"StorageDescriptor": {
+			"Distribution": null,
+			"Columns": [
+				{
+					"Name": "CustomerId",
+					"Description": "The unique identifier of a Customer.",
+					"OriginDataTypeName": {
+						"TypeName": "long",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "long"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerName.cdm.json/CustomerName",
+						"Name": "CustomerId"
+					}
+				},
+				{
+					"Name": "CustomerNameId",
+					"Description": "The unique identifier of a Customer Name.",
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerName.cdm.json/CustomerName",
+						"Name": "CustomerNameId"
+					}
+				},
+				{
+					"Name": "NameUsageId",
+					"Description": "The unique identifier of a name usage.",
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": false,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerName.cdm.json/CustomerName",
+						"Name": "NameUsageId"
+					}
+				},
+				{
+					"Name": "CustomerNameNote",
+					"Description": "A note, comment or additional information regarding the customer name.",
+					"OriginDataTypeName": {
+						"TypeName": "string",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 1024,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "string"
+						}
+					},
+					"BaseAttributeReference": {
+						"Entity": "CustomerName.cdm.json/CustomerName",
+						"Name": "CustomerNameNote"
+					}
+				}
+			],
+			"ColumnSetEntityName": "bb84b851-06d6-44ee-92da-75fca1b8c4e0",
+			"Format": {
+				"InputFormat": "org.apache.hadoop.mapred.SequenceFileInputFormat",
+				"OutputFormat": "org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat",
+				"FormatType": "csv",
+				"SerializeLib": "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe",
+				"Properties": {
+					"path": "abfss://synapse@msftsupplychainstorage.dfs.core.windows.net/MFG_Template/CustomerName",
+					"delimiter": ",",
+					"firstRowAsHeader": "false",
+					"multiLine": "false",
+					"serialization.format": "1",
+					"escape": "\\",
+					"quote": "\"",
+					"FormatTypeSetToDatabaseDefault": true,
+					"header": "false"
+				}
+			},
+			"Source": {
+				"Provider": "ADLS",
+				"Location": "abfss://synapse@msftsupplychainstorage.dfs.core.windows.net/MFG_Template/CustomerName",
+				"Properties": {
+					"LinkedServiceName": "msft-supply-chain-synapse-WorkspaceDefaultStorage",
+					"LocationSetToDatabaseDefault": true
+				}
+			},
+			"Properties": {
+				"textinputformat.record.delimiter": ",",
+				"compression": "{\"type\":\"None\",\"level\":\"optimal\"}",
+				"derivedModelAttributeInfo": "{\"attributeReferences\":{\"CustomerId\":{\"entity\":\"CustomerName.cdm.json/CustomerName\",\"name\":\"CustomerId\"},\"CustomerNameId\":{\"entity\":\"CustomerName.cdm.json/CustomerName\",\"name\":\"CustomerNameId\"},\"NameUsageId\":{\"entity\":\"CustomerName.cdm.json/CustomerName\",\"name\":\"NameUsageId\"},\"CustomerNameNote\":{\"entity\":\"CustomerName.cdm.json/CustomerName\",\"name\":\"CustomerNameNote\"}}}"
+			},
+			"Compressed": false,
+			"SerDeInfo": null,
+			"IsStoredAsSubdirectories": false
+		},
+		"Owner": null,
+		"CreateTime": 0,
+		"LastAccessTime": 0,
+		"Retention": 0,
+		"Temporary": false,
+		"IsRewriteEnabled": false,
+		"ViewOriginalText": null,
+		"ViewExpandedText": null,
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"OriginObjectId": null,
+		"IsSharedEntity": false,
+		"PublishStatus": "PUBLISHED",
+		"Properties": {
+			"DerivedModelEntityInfo": "{\"entityDirectives\":{\"baseEntityReference\":{\"name\":\"CustomerName\",\"path\":\"CustomerName.cdm.json/CustomerName\"},\"description\":\"The names by which the customer is known in various contexts or usages.\",\"primaryKey\":[\"CustomerId\",\"CustomerNameId\"],\"projectionInfo\":{\"attributes\":[{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerName.cdm.json/CustomerName\",\"name\":\"CustomerId\"},\"dataType\":\"long\",\"description\":\"The unique identifier of a Customer.\",\"isNullable\":false,\"name\":\"CustomerId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerName.cdm.json/CustomerName\",\"name\":\"CustomerNameId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a Customer Name.\",\"isNullable\":false,\"name\":\"CustomerNameId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerName.cdm.json/CustomerName\",\"name\":\"NameUsageId\"},\"dataType\":\"integer\",\"description\":\"The unique identifier of a name usage.\",\"isNullable\":false,\"name\":\"NameUsageId\"},{\"type\":\"Existing\",\"attributeReference\":{\"entity\":\"CustomerName.cdm.json/CustomerName\",\"name\":\"CustomerNameNote\"},\"dataType\":\"string\",\"dataTypeLength\":1024,\"description\":\"A note, comment or additional information regarding the customer name.\",\"isNullable\":true,\"name\":\"CustomerNameNote\"}]}}}",
+			"Description": "The names by which the customer is known in various contexts or usages.",
+			"DisplayFolderInfo": "{\"name\":\"Customer\",\"colorCode\":\"#022F22\"}",
+			"PrimaryKeys": "CustomerId,CustomerNameId",
+			"EXTERNAL": "TRUE",
+			"spark.sql.sources.provider": "csv",
+			"x-ms-usageinfo": "AzureSynapseDatabaseTemplate",
+			"spark.sql.sources.schema.numParts": "1",
+			"spark.sql.sources.schema.part.0": "{\"type\":\"struct\",\"fields\":[{\"name\":\"CustomerId\",\"type\":\"long\",\"nullable\":false,\"metadata\":{}},{\"name\":\"CustomerNameId\",\"type\":\"integer\",\"nullable\":false,\"metadata\":{}},{\"name\":\"NameUsageId\",\"type\":\"integer\",\"nullable\":false,\"metadata\":{}},{\"name\":\"CustomerNameNote\",\"type\":\"string\",\"nullable\":true,\"metadata\":{}}]}"
+		},
+		"ObjectVersion": 1,
+		"ObjectId": "06b2ee26-d7dd-4694-8eb2-741aa2d24d30",
+		"Description": "The names by which the customer is known in various contexts or usages."
+	},
+	"type": "TABLE"
+}

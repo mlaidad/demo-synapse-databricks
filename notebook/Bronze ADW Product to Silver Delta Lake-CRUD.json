@@ -1,0 +1,900 @@
+{
+	"name": "Bronze ADW Product to Silver Delta Lake-CRUD",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "SparkSC",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "e0ef562e-9189-4afa-a51a-d9d2e16d9c30"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"synapse_widget": {
+				"version": "0.1"
+			},
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/3a99ffce-3379-4883-8224-ca35bbb5f4c8/resourceGroups/supplychainsynapse/providers/Microsoft.Synapse/workspaces/supply-chain-synapse/bigDataPools/SparkSC",
+				"name": "SparkSC",
+				"type": "Spark",
+				"endpoint": "https://supply-chain-synapse.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/SparkSC",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.2",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Part 1 - AdventureWorks Product Info\r\n",
+					"## Declare ADLS Gen2 values to pass the AdventureWorks Product Info to the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"from pyspark.sql import SparkSession \r\n",
+					"from pyspark.sql.types import * \r\n",
+					"\r\n",
+					"# Primary storage info \r\n",
+					"account_name = 'supplychainbronze' # fill in your primary account name \r\n",
+					"container_name = 'adventureworkslt' # fill in your container name\r\n",
+					"relative_path = 'notebookdemo/product/new/' # fill in your relative folder path \r\n",
+					"\r\n",
+					"adls_path = 'abfss://%s@%s.dfs.core.windows.net/%s' % (container_name, account_name, relative_path) \r\n",
+					"print('Primary storage account path: ' + adls_path) \r\n",
+					"\r\n",
+					"# Read a csv file \r\n",
+					"csv_path = adls_path + '*.csv' # fill in your file extension\r\n",
+					"ADWBronzeProductDF = spark.read.csv(csv_path, header = 'true') "
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Retrieve the top 10 rows from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"ADWBronzeProductDF.show(10)"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Get the data schema from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"ADWBronzeProductDF.printSchema"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Create the TempView from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"ADWBronzeProductDF.createOrReplaceTempView(\"tmpADWBronzeProducts\")"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Run SparkSQL from TempView to test results"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"SELECT * FROM tmpADWBronzeProducts"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Part 2 - Get Data from the Silver Products SQL Serverless Pool\r\n",
+					"This is used for the MERGE delete statement in Part 4 - We need the silver data to compare if records have been deleted with full loads\r\n",
+					"## Connect to the SQL Serverless Pool"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Synapse SQL serverless name is in the format \"jdbc:sqlserver://<AzureSynapsename>-ondemand.sql.azuresynapse.net:1433\" \r\n",
+					"servername = \"jdbc:sqlserver://supply-chain-synapse-ondemand.sql.azuresynapse.net:1433\"\r\n",
+					"dbname = \"SilverDataLake\"\r\n",
+					"url = servername + \";\" + \"databaseName=\" + dbname + \";\"\r\n",
+					"dbtable = \"vwSilverNotebookDemoProducts\" # Identify the view in the Serverless SQL database\r\n",
+					"user= mssparkutils.credentials.getSecret('kv-SupplyChainHack','synapseusername')\r\n",
+					"password = mssparkutils.credentials.getSecret('kv-SupplyChainHack','synapsepassword')"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Read Date from the Serverless SQL View"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"#Read from SQL table using MS SQL Connector\r\n",
+					"print(\"read data from SQL server table  \")\r\n",
+					"ADWSilverProductDF = spark.read \\\r\n",
+					"        .format(\"com.microsoft.sqlserver.jdbc.spark\") \\\r\n",
+					"        .option(\"url\", url) \\\r\n",
+					"        .option(\"dbtable\", dbtable) \\\r\n",
+					"        .option(\"user\", user) \\\r\n",
+					"        .option(\"password\", password).load()"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Retrieve the top 10 rows from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"ADWSilverProductDF.orderBy(\"ProductID\").show(10)"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Get the data schema from the DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"ADWSilverProductDF.printSchema"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Create the TempView from the DataFrame\r\n",
+					"For this example we are filtering on the Source = AdventureWorks"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"ADWSilverProductDF.where(ADWSilverProductDF.Source == \"AdventureWorks\").createOrReplaceTempView(\"tmpADWSilverProducts\")"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Run SparkSQL from TempView to test results"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"SELECT * FROM tmpADWSilverProducts ORDER BY ProductID"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Part 3 - Create/Test the Temp Views to import into the Delta Lake\r\n",
+					"## Test SQL Statement that will be utilized in the Insert/Update via Spark SQL"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"SELECT\r\n",
+					"    CONCAT('ADW-', B.ProductID) as ProductID,\r\n",
+					"    B.Name as ProductName, \r\n",
+					"    B.ProductNumber, \r\n",
+					"    B.StandardCost as UnitPrice,\r\n",
+					"    B.ListPrice as RetailPrice,\r\n",
+					"    B.ModifiedDate,\r\n",
+					"    'AdventureWorks' as Source\r\n",
+					"\r\n",
+					"FROM tmpADWBronzeProducts B\r\n",
+					"\r\n",
+					"ORDER BY B.ProductID"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Test SQL Statement to Combine the Bronze and Silver Views to determine if records have been deleted via Spark SQL"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"SELECT\r\n",
+					"    S.ProductID AS SilverProductID,\r\n",
+					"    S.ModifiedDate AS SilverModifiedDate,\r\n",
+					"    CONCAT('ADW-', B.ProductID) as ProductID,\r\n",
+					"    B.Name as ProductName, \r\n",
+					"    B.ProductNumber, \r\n",
+					"    B.StandardCost as UnitPrice,\r\n",
+					"    B.ListPrice as RetailPrice,\r\n",
+					"    B.ModifiedDate,\r\n",
+					"    'AdventureWorks' as Source\r\n",
+					"\r\n",
+					"FROM tmpADWSilverProducts S\r\n",
+					"LEFT JOIN tmpADWBronzeProducts B on (S.ProductID = CONCAT('ADW-', B.ProductID))\r\n",
+					"\r\n",
+					"ORDER BY B.ProductID"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Part 4 - Update/Insert the data to the Silver Delta Lake\r\n",
+					"## Combine the TempViews data in a Spark SQL statement"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Create the Product Delta Table \r\n",
+					"Once the table is created, this does not need to be utilized in the future"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"--DROP TABLE Products "
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"CREATE TABLE Products \r\n",
+					"(\r\n",
+					"    ProductID  string,\r\n",
+					"    ProductName  string,\r\n",
+					"\tProductNumber  string,\r\n",
+					"\tUnitPrice  double,\r\n",
+					"\tRetailPrice  double,\r\n",
+					"\tModifiedDate  timestamp,\r\n",
+					"\tSource  string\r\n",
+					") \r\n",
+					"USING DELTA\r\n",
+					"LOCATION 'abfss://sales@supplychainsilver.dfs.core.windows.net/notebookdemo/products';"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Combine the TempViews data in a Spark SQL statement and use a MERGE statement to insert/update the data to the Products DELTA Table"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"CREATE OR REPLACE TEMP VIEW tmpADWProductsInsertUpdate AS\r\n",
+					"\r\n",
+					"(\r\n",
+					"SELECT\r\n",
+					"    CONCAT('ADW-', B.ProductID) as ProductID,\r\n",
+					"    B.Name as ProductName, \r\n",
+					"    B.ProductNumber, \r\n",
+					"    B.StandardCost as UnitPrice,\r\n",
+					"    B.ListPrice as RetailPrice,\r\n",
+					"    B.ModifiedDate,\r\n",
+					"    'AdventureWorks' as Source\r\n",
+					"\r\n",
+					"FROM tmpADWBronzeProducts B\r\n",
+					");\r\n",
+					"\r\n",
+					"MERGE INTO Products\r\n",
+					"USING tmpADWProductsInsertUpdate PIU\r\n",
+					"ON Products.ProductID = PIU.ProductID\r\n",
+					"WHEN MATCHED THEN UPDATE SET *\r\n",
+					"WHEN NOT MATCHED THEN INSERT *;"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Combine the TempViews data in a Spark SQL statement and use a MERGE statement to delete the data to the Products DELTA Table"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"\r\n",
+					"CREATE OR REPLACE TEMP VIEW tmpADWProductsDelete AS\r\n",
+					"\r\n",
+					"(\r\n",
+					"SELECT\r\n",
+					"    S.ProductID AS SilverProductID,\r\n",
+					"    S.ModifiedDate AS SilverModifiedDate,\r\n",
+					"    CONCAT('ADW-', B.ProductID) as ProductID,\r\n",
+					"    B.Name as ProductName, \r\n",
+					"    B.ProductNumber, \r\n",
+					"    B.StandardCost as UnitPrice,\r\n",
+					"    B.ListPrice as RetailPrice,\r\n",
+					"    B.ModifiedDate,\r\n",
+					"    'AdventureWorks' as Source\r\n",
+					"\r\n",
+					"FROM tmpADWSilverProducts S\r\n",
+					"LEFT JOIN tmpADWBronzeProducts B on (S.ProductID = CONCAT('ADW-', B.ProductID))\r\n",
+					");\r\n",
+					"\r\n",
+					"MERGE INTO Products\r\n",
+					"USING tmpADWProductsDelete PD\r\n",
+					"ON Products.ProductID = PD.SilverProductID\r\n",
+					"WHEN MATCHED and PD.ProductID IS NULL THEN DELETE\r\n",
+					"\r\n",
+					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Query the Products Delta Table"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"select * from Products order by ProductID\r\n",
+					""
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"select count(ProductID) from products"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## View the History of the Products table"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "sparksql"
+					},
+					"collapsed": false
+				},
+				"source": [
+					"%%sql\r\n",
+					"\r\n",
+					"DESCRIBE HISTORY Products"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Set the Dataframe to get the time travel information"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"ProductVersionAsOfDF = (spark\r\n",
+					"    .read\r\n",
+					"    .format(\"delta\")\r\n",
+					"    .option(\"versionAsOf\", 22)\r\n",
+					"    .load(\"abfss://sales@supplychainsilver.dfs.core.windows.net/notebookdemo/products\")\r\n",
+					")"
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Show the time travel data in the Dataframe"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"ProductVersionAsOfDF.orderBy(\"ProductID\").show()"
+				]
+			}
+		]
+	}
+}

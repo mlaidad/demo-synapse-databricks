@@ -1,0 +1,113 @@
+{
+	"name": "ADW_SalesOrderHeader_to_Silver",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Bronze_DelimitedText",
+						"type": "DatasetReference"
+					},
+					"name": "BronzeSalesOrderHeader"
+				}
+			],
+			"sinks": [
+				{
+					"linkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					},
+					"name": "OutputtoSilver",
+					"rejectedDataLinkedService": {
+						"referenceName": "demosynapsesilver",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectSalesOrderHeader"
+				},
+				{
+					"name": "DerivedColumnSalesOrderHeader"
+				},
+				{
+					"name": "alterRow"
+				}
+			],
+			"scriptLines": [
+				"parameters{",
+				"     SourceDatabase as string",
+				"}",
+				"source(output(",
+				"          SalesOrderID as integer,",
+				"          RevisionNumber as short,",
+				"          OrderDate as string,",
+				"          DueDate as string,",
+				"          ShipDate as string,",
+				"          Status as short,",
+				"          OnlineOrderFlag as boolean,",
+				"          SalesOrderNumber as string,",
+				"          PurchaseOrderNumber as string,",
+				"          AccountNumber as string,",
+				"          CustomerID as short,",
+				"          ShipToAddressID as short,",
+				"          BillToAddressID as short,",
+				"          ShipMethod as string,",
+				"          CreditCardApprovalCode as string,",
+				"          SubTotal as double,",
+				"          TaxAmt as double,",
+				"          Freight as double,",
+				"          TotalDue as double,",
+				"          Comment as string,",
+				"          rowguid as string,",
+				"          ModifiedDate as string",
+				"     ),",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     moveFiles: ['SalesLT/SalesOrderHeader/new/','SalesLT/SalesOrderHeader/imported/'],",
+				"     wildcardPaths:['SalesLT/SalesOrderHeader/new/*.csv']) ~> BronzeSalesOrderHeader",
+				"BronzeSalesOrderHeader select(mapColumn(",
+				"          OrderID = SalesOrderID,",
+				"          CustomerID,",
+				"          OrderDate,",
+				"          DueDate,",
+				"          PONumber = PurchaseOrderNumber,",
+				"          ModifiedDate",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> SelectSalesOrderHeader",
+				"SelectSalesOrderHeader derive(OrderID = concat('ADV-', toString(OrderID)),",
+				"          CustomerID = concat('ADV-', toString(CustomerID)),",
+				"          OrderDate = toTimestamp(OrderDate),",
+				"          DueDate = toTimestamp(DueDate),",
+				"          ModifiedDate = toTimestamp(ModifiedDate),",
+				"          Source = 'AdventureWorksLT') ~> DerivedColumnSalesOrderHeader",
+				"DerivedColumnSalesOrderHeader alterRow(upsertIf(isNull(OrderID)==false())) ~> alterRow",
+				"alterRow sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     compressionType: 'snappy',",
+				"     compressionLevel: 'Fastest',",
+				"     fileSystem: 'sales',",
+				"     folderPath: 'salesorderheader/',",
+				"     mergeSchema: false,",
+				"     autoCompact: true,",
+				"     optimizedWrite: true,",
+				"     vacuum: 0,",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['OrderID'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> OutputtoSilver"
+			]
+		}
+	}
+}

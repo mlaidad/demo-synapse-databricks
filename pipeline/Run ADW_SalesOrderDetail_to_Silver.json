@@ -1,0 +1,45 @@
+{
+	"name": "Run ADW_SalesOrderDetail_to_Silver",
+	"properties": {
+		"activities": [
+			{
+				"name": "ADW_SalesOrderDetail_to_Silver",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "ADW_SalesOrderDetail_to_Silver",
+						"type": "DataFlowReference",
+						"parameters": {
+							"SourceDatabase": "'adventureworkslt'"
+						},
+						"datasetParameters": {
+							"BronzeSalesOrderDetail": {
+								"SourceDatabase": "adventureworkslt"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "Other"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-02T22:21:10Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

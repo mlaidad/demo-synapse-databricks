@@ -1,0 +1,34 @@
+{
+	"name": "Demo Prep Gold-Silver-Bronze",
+	"properties": {
+		"description": "Used to update the watermark values to Jan 1 2000 in prep for the demo",
+		"activities": [
+			{
+				"name": "Execute sp_demo_prep",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[sp_demo_prep]"
+				},
+				"linkedServiceName": {
+					"referenceName": "DATAFACTORY_jobender",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"folder": {
+			"name": "Demo"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-02T22:21:41Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

@@ -1,0 +1,29 @@
+{
+	"name": "relationship-pysnkamrsz",
+	"properties": {
+		"Name": "relationship-pysnkamrsz",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "State",
+		"ToTableName": "Document",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "StateId",
+				"ToColumnName": "StateId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"State.cdm.json/State\",\"toEntity\":\"Document.cdm.json/Document\",\"joinPairs\":[{\"fromAttribute\":\"StateId\",\"toAttribute\":\"StateId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "ff44a4d2-3cc7-46aa-a460-11d7e6e54ab7"
+	},
+	"type": "RELATIONSHIP"
+}

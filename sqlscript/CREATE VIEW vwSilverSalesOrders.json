@@ -1,0 +1,17 @@
+{
+	"name": "CREATE VIEW vwSilverSalesOrders",
+	"properties": {
+		"content": {
+			"query": "CREATE VIEW vwSilverSalesOrders AS\n\nSELECT\n *\nFROM\n\n    OPENROWSET(\n        BULK 'sales/salesorderheader',\n        DATA_SOURCE = 'SqlOnDemandMI',\n        FORMAT = 'delta'    \n\n    ) AS SalesOrders;\n\n-- select * from vwSilverSalesOrders where Source = 'WideWorldImporters' order by ProductID ASC\n\n-- select count(OrderID) from vwSilverSalesOrders\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "SilverLayer",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

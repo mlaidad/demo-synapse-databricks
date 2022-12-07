@@ -1,0 +1,29 @@
+{
+	"name": "relationship-vnzrfhivpd",
+	"properties": {
+		"Name": "relationship-vnzrfhivpd",
+		"EntityType": "RELATIONSHIP",
+		"Namespace": {
+			"DatabaseName": "MFG_Template"
+		},
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"FromTableName": "Location",
+		"ToTableName": "Order",
+		"ColumnRelationshipInformations": [
+			{
+				"FromColumnName": "LocationId",
+				"ToColumnName": "ShipmentToLocationId"
+			}
+		],
+		"RelationshipType": 0,
+		"Properties": {
+			"DerivedModelRelationshipInfo": "{\"baseRelationship\":{\"fromEntity\":\"Location.cdm.json/Location\",\"toEntity\":\"Order.cdm.json/Order\",\"joinPairs\":[{\"fromAttribute\":\"LocationId\",\"toAttribute\":\"ShipmentToLocationId\"}]}}"
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "e1fa7f3e-de83-4fd1-a5bf-29987756886c"
+	},
+	"type": "RELATIONSHIP"
+}

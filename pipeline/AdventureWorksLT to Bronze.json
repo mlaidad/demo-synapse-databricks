@@ -1,0 +1,65 @@
+{
+	"name": "AdventureWorksLT to Bronze",
+	"properties": {
+		"activities": [
+			{
+				"name": "LookupTableList",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": "SELECT *  FROM [dbo].[watermarkdemo] where SourceDatabase = 'AdventureWorksLT'",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "DATAFACTORY",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			},
+			{
+				"name": "Trigger Copy",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "LookupTableList",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "AdventureWorksLT Iterate and Copy",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"tableList": {
+							"value": "@activity('LookupTableList').output.value",
+							"type": "Expression"
+						}
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "Demo"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-02T22:21:49Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

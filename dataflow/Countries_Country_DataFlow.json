@@ -1,0 +1,31 @@
+{
+	"name": "Countries_Country_DataFlow",
+	"properties": {
+		"folder": {
+			"name": "Countries"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "demo-synapse-databricks-WorkspaceDefaultStorage",
+						"type": "LinkedServiceReference"
+					},
+					"name": "ApplicationCountriescsvSource"
+				}
+			],
+			"sinks": [
+				{
+					"name": "CountrySink"
+				}
+			],
+			"transformations": [
+				{
+					"name": "SelectCountry"
+				}
+			],
+			"script": "source(output(\n\t\tCountryID as short,\n\t\tCountryName as string,\n\t\tFormalName as string,\n\t\tIsoAlpha3Code as string,\n\t\tIsoNumericCode as short,\n\t\tCountryType as string,\n\t\tLatestRecordedPopulation as integer,\n\t\tContinent as string,\n\t\tRegion as string,\n\t\tSubregion as string\n\t),\n\tuseSchema: false,\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'delimited',\n\tfileSystem: 'wwi',\n\tfolderPath: 'country',\n\tfileName: 'Application_Countries.csv',\n\tcolumnDelimiter: ',',\n\tescapeChar: '\\\\',\n\tquoteChar: '\\\"',\n\tcolumnNamesAsHeader: true) ~> ApplicationCountriescsvSource\nApplicationCountriescsvSource select(mapColumn(\n\t\tCountryId = CountryID,\n\t\tIsoCountryName = CountryName,\n\t\tIso3DigitCountryCode = IsoAlpha3Code,\n\t\tIso3LetterCountryCode = IsoAlpha3Code\n\t),\n\tskipDuplicateMapInputs: false,\n\tskipDuplicateMapOutputs: false) ~> SelectCountry\nSelectCountry sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tstore: 'synapse',\n\tdatabaseType: 'spark',\n\tformat: 'table',\n\tdatabase: 'MFG_Template',\n\ttableName: 'Country',\n\tinput(\n\t\tCountryId as integer,\n\t\tIsoCountryName as string,\n\t\tIso2LetterCountryCode as string,\n\t\tIso3LetterCountryCode as string,\n\t\tIso3DigitCountryCode as decimal(3,0),\n\t\tCapitalOrMajorCityName as string\n\t)) ~> CountrySink"
+		}
+	}
+}

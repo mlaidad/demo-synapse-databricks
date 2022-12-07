@@ -1,0 +1,45 @@
+{
+	"name": "Run WWI_Orderlines_to_Silver",
+	"properties": {
+		"activities": [
+			{
+				"name": "WWI_Orderlines_to_Silver",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "WWI_Orderlines_to_Silver",
+						"type": "DataFlowReference",
+						"parameters": {
+							"SourceDatabase": "'wideworldimporters'"
+						},
+						"datasetParameters": {
+							"BronzeOrderlines": {
+								"SourceDatabase": "wideworldimporters"
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "Other"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-11-02T22:21:18Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}
